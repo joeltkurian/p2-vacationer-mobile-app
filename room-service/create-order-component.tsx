@@ -1,5 +1,5 @@
 import React from "react";
-import { Text, View, Image, Button, FlatList, ScrollView, Dimensions } from "react-native";
+import { Text, View, Image, Button, FlatList, Dimensions } from "react-native";
 import { Offering } from '../dtos';
 
 export default function CreateOrderComponent(){
@@ -19,7 +19,7 @@ export default function CreateOrderComponent(){
     const scrHeight = Dimensions.get('window').height;
 
     return(
-        <View style={{height:scrHeight, width:scrWidth, paddingTop:30, alignContent:"center", paddingLeft:2, paddingRight:2}}>
+        <View style={{ width:scrWidth, alignContent:"center", paddingHorizontal:2, justifyContent:"flex-start"}}>
             <Text style={{alignSelf:"center"}}>Create Order Component</Text>
             <FlatList data={dummy} renderItem={({item}) => offeringItem({off:item})} keyExtractor={item => item.desc}/>
         </View>
@@ -29,10 +29,9 @@ export default function CreateOrderComponent(){
 function offeringItem(props:{off:Offering}){
     const {desc, cost} = props.off;
     const [title, descr] = desc.split('*');
-    const imageLink = 'https://jtkbackgroundimgs.blob.core.windows.net/jtkreimbursementbackgrounds/question-mark.png';
+    const imageLink = 'https://specialspectacleimg.blob.core.windows.net/continentalimgs/question-mark.png';
 
     const scrWidth = Dimensions.get('window').width;
-    const scrHeight = Dimensions.get('window').height;
 
     return(
         <View style={{flexDirection:"row", width:"100%", height:135}}>

@@ -6,15 +6,15 @@ import CreateOrderComponent from "./create-order-component";
 
 export default function RoomServiceComponent(){
 
-    const scrWidth = Dimensions.get('window').width;
+    const baseUrl = "http://52.224.91.41:3000/";
 
     return(
         <View style={styles.container}>
-            <CreateOrderComponent/>
-            {/* <CartComponent/>
-            <CompletedOrders/> */}
-            <View style={{height:40, width:scrWidth, flexDirection:"row", alignSelf:"flex-end", alignItems:"center", justifyContent:"center"}}>
-                <View style={{flexDirection:"row", width:"100%", alignItems:"center", alignContent:"center", justifyContent:"space-evenly", alignSelf:"center"}}>
+            {/* <CreateOrderComponent/> */}
+            <CartComponent/>
+            {/* <CompletedOrders/> */}
+            <View style={{width:scrWidth, flexDirection:"row", alignSelf:"flex-end", alignItems:"center", justifyContent:"center"}}>
+                <View style={{flexDirection:"row", width:"100%", justifyContent:"space-evenly"}}>
                 <Button onPress={() =>{}} title="Create an Order"></Button>
                 <Button onPress={() =>{}} title="Cart"></Button>
                 <Button onPress={() =>{}} title="My Orders"></Button>
@@ -24,6 +24,10 @@ export default function RoomServiceComponent(){
     )
 }
 
+    const scrWidth = Dimensions.get('window').width;
+    const scrHeight = Dimensions.get('window').height;
+
+
 const styles = StyleSheet.create({
     container: {
         display: "flex",
@@ -32,7 +36,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         alignContent: 'center',
         justifyContent: 'center',
-        paddingTop:20,
-        height:"100%"
+        paddingTop:70,
+        height:scrHeight,
+        width:scrWidth
       },
 });

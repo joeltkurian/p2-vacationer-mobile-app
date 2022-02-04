@@ -1,4 +1,5 @@
 import { Text, View } from "react-native";
+import { ServiceRequest } from "../dtos";
 
 export default function CompletedOrders(){
 

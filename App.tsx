@@ -8,6 +8,8 @@ import SignInView from './complaints-activities-login/sign-in-view';
 export default function App() {
   const [user, setUser] = useState({id: "69420", isAuthenticated: false})
 
+
+  {/* For complaint view: <ComplaintView/> */}
   return (
     <View style={styles.container}>
       

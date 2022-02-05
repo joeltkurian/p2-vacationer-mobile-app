@@ -2,21 +2,23 @@ import { useState } from "react";
 import { Button, FlatList, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 
 export default function ComplaintView(){
+
+    //dummy data for now
     const [complaints, setActivities] = useState([
         {id: "1", submittedTime: 0, desc: "My gun didnt shoot and I ended up dying, now the series can't continue", status: "Unreviewed", photoLink: ""},
         {id: "2", submittedTime: 8, desc: "TEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEXT", status: "Unreviewed"},
-        {id: "3", submittedTime: 12, desc: "desc", status: "Unreviewed", photoLink: ""},
-        {id: "4", submittedTime: 17, desc: "movie quote", status: "Unreviewed", photoLink: undefined},
+        {id: "3", submittedTime: 12, desc: "desc", status: "Unreviewed", photoLink: NaN}, //this one isn't falsy, neat
+        {id: "4", submittedTime: 17, desc: "movie quote", status: "Unreviewed", photoLink: null},
         {id: "5", submittedTime: 5, desc: "pop culture reference", status: "Unreviewed", photoLink: undefined},        
         
     ])      
     
     function getComplaints(){
-    
+        console.log("in progress")
     }
 
     function addComplaint(){
-
+        console.log("in progress")
     }
 
     return(<View>
@@ -30,13 +32,15 @@ export default function ComplaintView(){
                         <Text style={styles.title}>{item.status}</Text>
                         
                         <View style={{flexDirection: 'row'}}>
-                            {/* Image View ONLY if it has one*/}
+                            {/* Image View ONLY if it has an image*/}
                             {!!item.photoLink?.toString ?
                             <View style={{backgroundColor:'#ffcab1'}}>
                                 <View style={{height: 100, width: 100, backgroundColor: 'red'}}></View>
-                            </View> : <></>
+                            </View> 
+                            
+                            : <></>
                             }
-                            {/* Description View */}
+                            {/* Description/Status View */}
                             <View>
                                 <Text style={styles.desc}>DESCRIPTION: {item.desc}</Text>
                                 <Text style={styles.timeText}>Time Sumbitted: {item.submittedTime}</Text>

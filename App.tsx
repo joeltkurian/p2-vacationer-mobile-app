@@ -1,8 +1,9 @@
 import { StatusBar } from 'expo-status-bar';
 import { useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import ActivitiyView from './components/activitiy-view';
-import SignInView from './components/sign-in-view';
+import ActivitiyView from './complaints-activities-login/activitiy-view';
+import ComplaintView from './complaints-activities-login/complaint-view';
+import SignInView from './complaints-activities-login/sign-in-view';
 
 export default function App() {
   const [user, setUser] = useState({id: "69420", isAuthenticated: false})
@@ -11,7 +12,9 @@ export default function App() {
     <View style={styles.container}>
       
       {!user.isAuthenticated ? <SignInView user={user} updateUser={setUser}/> : 
-        <ActivitiyView/>}
+        <ComplaintView/>
+        
+      }
       
       <StatusBar style="auto" />
     </View>

@@ -1,7 +1,9 @@
-import { Text, View } from "react-native";
+import { FlatList, Text, View } from "react-native";
 import { ServiceRequest, Offering } from "../dtos";
 import Accordion from 'react-native-collapsible/Accordion';
+import { scrHeight, scrWidth } from "./room-service-container";
 import { useState } from "react";
+import { idText, isTemplateExpression } from "typescript";
 
 export default function CompletedOrders(){
 
@@ -10,22 +12,35 @@ export default function CompletedOrders(){
     function renderTitle(section:ServiceRequest){
         return(
             <View>
-                <Text>ID: {section.id}</Text>
+                {/* <Text>ID: {section.id}</Text> */}
             </View>
         )
     }
 
     function renderHeader(section:ServiceRequest){
         return(
-            <View>
-                <Text>Room #: {section.room}</Text>
+            <View style={{padding:5, backgroundColor:section.status === 'Ordered'? "#0ff9":section.status === 'Processing' ? "#00f9":section.status === 'Cancelled'?"#f009":"#0f09"}}>
+                <Text style={{alignSelf:"center"}}>Room #: {section.room}</Text>
             </View>
         )
     }
 
     function renderContent(section:ServiceRequest){
         
-        const bill = total(section.requestedOffering)
+        const bill = total(section.requestedOffering);
+        const items = section.requestedOffering.length;
+        const tall = (items*5)+30;
+
+        function renderItem(props:{offering:Offering}){
+            const {desc, cost} = props.offering;
+            const [title, rest] = desc.split('*');
+            return(
+                <View style={{flexDirection:"row"}}>
+                    <Text>{title}</Text>
+                    <Text>${cost.toFixed(2)}</Text>
+                </View>
+            )
+        }
 
         return(
             <View>
@@ -34,6 +49,8 @@ export default function CompletedOrders(){
                 <Text>Ordered: {section.created}</Text>
                 <Text>Status: {section.status}</Text>
                 <Text>Order Total: ${bill.toFixed(2)}</Text>
+                <Text>Order Contents:</Text>
+                <FlatList data={section.requestedOffering} renderItem={({item}) => renderItem({offering:item})} keyExtractor={item => item.desc}/>
             </View>
         )
     }
@@ -50,7 +67,8 @@ export default function CompletedOrders(){
         ]},
         {id: "fro", room: "300", created: 1000, status: "Processing", requestedOffering: [
             {desc:"Chicken Parm*Lorem Ipsum About Chicken Parm", cost:21.50}
-        ]},{id: "fru", room: "300", created: 1000, status: "Completed", requestedOffering: [
+        ]},
+        {id: "fru", room: "300", created: 1000, status: "Completed", requestedOffering: [
             {desc:"Shrimp Scampi*Lorem Ipsum About Shrimp Scampi", cost:24.75}
         ]},{id: "fra", room: "300", created: 1000, status: "Completed", requestedOffering: [
             {desc:"Chicken Parm*Lorem Ipsum About Chicken Parm", cost:21.50},
@@ -60,6 +78,27 @@ export default function CompletedOrders(){
             {desc:"Shrimp Scampi*Lorem Ipsum About Shrismp Scampi", cost:24.75},
             {desc:"Shrimp Scampi*Lorems Ipsum About Shrimp Scampi", cost:24.75},
             {desc:"Shrimdp Scampi*Loresm fIpsum About Shrimp Scampi", cost:24.75}
+        ]},
+        {id: "dfsa", room: "300", created: 1000, status: "Processing", requestedOffering: [
+            {desc:"Chicken Parm*Lorem Ipsum About Chicken Parm", cost:21.50}
+        ]},
+        {id: ",kiiuy", room: "300", created: 1000, status: "Processing", requestedOffering: [
+            {desc:"Chicken Parm*Lorem Ipsum About Chicken Parm", cost:21.50}
+        ]},
+        {id: "ewqr", room: "300", created: 1000, status: "Processing", requestedOffering: [
+            {desc:"Chicken Parm*Lorem Ipsum About Chicken Parm", cost:21.50}
+        ]},
+        {id: "xcvb", room: "300", created: 1000, status: "Processing", requestedOffering: [
+            {desc:"Chicken Parm*Lorem Ipsum About Chicken Parm", cost:21.50}
+        ]},
+        {id: "asd", room: "300", created: 1000, status: "Processing", requestedOffering: [
+            {desc:"Chicken Parm*Lorem Ipsum About Chicken Parm", cost:21.50}
+        ]},
+        {id: "adsfg", room: "300", created: 1000, status: "Processing", requestedOffering: [
+            {desc:"Chicken Parm*Lorem Ipsum About Chicken Parm", cost:21.50}
+        ]},
+        {id: "lioui", room: "300", created: 1000, status: "Processing", requestedOffering: [
+            {desc:"Chicken Parm*Lorem Ipsum About Chicken Parm", cost:21.50}
         ]},
     ]
 
@@ -72,9 +111,11 @@ export default function CompletedOrders(){
     }
 
     return(
-        <View>
+        <View style={{height:scrHeight-20, width:scrWidth, paddingTop:30, alignItems:"center", backgroundColor:"#aaa"}}>
             <Text>Completed orders component</Text>
-            <Accordion activeSections={activeSections} sections={dummy} renderSectionTitle={renderTitle} renderHeader={renderHeader} renderContent={renderContent} onChange={() =>{updateSections(activeSections)}} expandMultiple={false}/>
+            <View style={{alignItems:"center"}}>
+            <Accordion activeSections={activeSections} sections={dummy} renderSectionTitle={renderTitle} renderHeader={renderHeader} renderContent={renderContent} onChange={(section:any) =>{updateSections(section)}} expandMultiple={true}/>
+            </View>
         </View>
     )
 }

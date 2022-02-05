@@ -11,8 +11,8 @@ export default function RoomServiceComponent(){
     return(
         <View style={styles.container}>
             {/* <CreateOrderComponent/> */}
-            <CartComponent/>
-            {/* <CompletedOrders/> */}
+            {/* <CartComponent/> */}
+            <CompletedOrders/>
             <View style={{width:scrWidth, flexDirection:"row", alignSelf:"flex-end", alignItems:"center", justifyContent:"center"}}>
                 <View style={{flexDirection:"row", width:"100%", justifyContent:"space-evenly"}}>
                 <Button onPress={() =>{}} title="Create an Order"></Button>

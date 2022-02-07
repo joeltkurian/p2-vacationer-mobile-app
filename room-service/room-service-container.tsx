@@ -1,35 +1,37 @@
 import React, { useState } from "react";
-import { StyleSheet, View, Dimensions, Button } from "react-native";
+import { StyleSheet, View, Button } from "react-native";
 import CartComponent from "./cart-component";
 import CompletedOrders from "./completed-orders";
 import CreateOrderComponent from "./create-order-component";
+import { scrHeight, scrWidth } from "./dimenstions";
 
 export default function RoomServiceComponent(){
 
     const baseUrl = "http://52.224.91.41:3000/";
 
-    const [createVisible,setCreateVisible] = useState(false);
-    const [cartVisible,setCartVisible] = useState(false);
-    const [ordersVisible,setOrdersVisible] = useState(true);
+    const [visibleComponent,setVisibleComponent] = useState(0);
+
+    function setComponent(num:number){
+        setVisibleComponent(num);
+    }
 
     return(
         <View style={styles.container}>
-            {createVisible ? <CreateOrderComponent/> : <View/>}
-            {cartVisible ? <CartComponent/> : <View/>}
-            {ordersVisible ? <CompletedOrders/> : <View/>}
+            {visibleComponent < 1 ? <CreateOrderComponent/> 
+            :visibleComponent === 1 ? <CartComponent/> 
+            :<CompletedOrders/>}
             <View style={{width:scrWidth, flexDirection:"row", alignSelf:"flex-end", alignItems:"center", justifyContent:"center"}}>
-                <View style={{flexDirection:"row", width:"100%", justifyContent:"space-evenly"}}>
-                <Button onPress={() =>{}} title="Create an Order"></Button>
-                <Button onPress={() =>{}} title="Cart"></Button>
-                <Button onPress={() =>{}} title="My Orders"></Button>
+                <View style={{flexDirection:"row", width:"100%", justifyContent:"space-evenly", height:37}}>
+                <Button onPress={() =>{setComponent(0)}} title="Create an Order"></Button>
+                <Button onPress={() =>{setComponent(1)}} title="Cart"></Button>
+                <Button onPress={() =>{setComponent(2)}} title="My Orders"></Button>
                 </View>
             </View>
         </View>
     )
 }
 
-    export const scrWidth = Dimensions.get('window').width;
-    export const scrHeight = Dimensions.get('window').height;
+    
 
 
 const styles = StyleSheet.create({

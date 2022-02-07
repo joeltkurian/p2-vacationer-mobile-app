@@ -29,6 +29,12 @@ export interface Offering {
     cost: number
 }
 
+export interface Offerings{
+    items:Offering[],
+    quantities:number[]
+}
+
+
 export interface ProblemSubmission {
     desc: string,
     base64Photo?: string

@@ -1,5 +1,5 @@
 import { FlatList, ScrollView, StyleSheet, Text, View } from "react-native";
-import { ServiceRequest, Offering } from "../dtos";
+import { ServiceRequest, Offering, Offerings } from "../dtos";
 import Accordion from 'react-native-collapsible/Accordion';
 import { scrHeight, scrWidth } from "./dimenstions";
 import { useState } from "react";
@@ -11,7 +11,7 @@ export default function CompletedOrders(){
     function renderTitle(section:ServiceRequest){
         return(
             <View style={{height:0}}>
-                {/* <Text>ID: {section.id}</Text> */}
+                <Text style={{fontSize:10}}>ID: {section.id}</Text>
             </View>
         )
     }
@@ -27,18 +27,32 @@ export default function CompletedOrders(){
     function renderContent(section:ServiceRequest){
         
         const bill = total(section.requestedOffering);
-        const items = section.requestedOffering.length;
-        const tall = (items*5)+30;
+        const condensed = convert(section.requestedOffering);
 
-        function renderItem(props:{offering:Offering}){
+        function renderItem(props:{offering:Offering, quantity:number}){
             const {desc, cost} = props.offering;
             const [title, rest] = desc.split('*');
             return(
-                <View style={{flexDirection:"row"}}>
-                    <Text>{title}</Text>
-                    <Text>${cost.toFixed(2)}</Text>
+                <View style={{flexDirection:"row", justifyContent:"space-between"}}>
+                    <Text>{title}:</Text>
+                    <Text>x{props.quantity}     ${(cost*props.quantity).toFixed(2)}</Text>
                 </View>
             )
+        }
+
+        function convert(off:Offering[]):Offerings{
+            let cart:Offerings={items:[], quantities:[]};
+    
+            for(const i of off){
+                const index = cart.items.findIndex(c => c.desc === i.desc)
+                if(index != -1){
+                    cart.quantities[index]+=1;
+                }else{
+                    cart.items.push(i);
+                    cart.quantities.push(1);
+                }
+            }
+            return cart;
         }
 
         return(
@@ -49,9 +63,7 @@ export default function CompletedOrders(){
                 <Text>Status: {section.status}</Text>
                 <Text>Order Total: ${bill.toFixed(2)}</Text>
                 <Text>Order Contents:</Text>
-                <ScrollView style={{maxHeight:100, width:scrWidth-100, backgroundColor:"#fff5"}} nestedScrollEnabled={true}>
-                    <FlatList data={section.requestedOffering} renderItem={({item}) => renderItem({offering:item})} keyExtractor={item => item.desc}/>
-                </ScrollView>
+                <FlatList style={{width:scrWidth-100, backgroundColor:"#fff5"}} data={condensed.items} renderItem={({item, index}) => renderItem({offering:item, quantity:condensed.quantities[index]})} keyExtractor={(item) => item.desc}/>
             </View>
         )
     }
@@ -59,12 +71,13 @@ export default function CompletedOrders(){
     const dummy:ServiceRequest[] = [
         {id: "foo", room: "300", created: 1000, status: "Ordered", requestedOffering: [
             {desc:"Chicken Parm*Lorem Ipsum About Chicken Parm", cost:21.50},
+            {desc:"Chicken Parm*Lorem Ipsum About Chicken Parm", cost:21.50},
+            {desc:"Chicken Parm*Lorem Ipsum About Chicken Parm", cost:21.50},
+            {desc:"Chicken Parm*Lorem Ipsum About Chicken Parm", cost:21.50},
             {desc:"Shrimp Scampi*Lorem Ipsum About Shrimp Scampi", cost:24.75},
-            {desc:"Rice Balls*Lorem Ipsum About Rice Balls Lorem Ipsum About Rice Balls Lorem Ipsum About Rice Balls Lorem Ipsum About Rice Balls Lorem Ipsum About Rice Balls Lorem Ipsum About Rice Balls Lorem Ipsum About Rice Balls Lorem Ipsum About Rice Balls Lorem Ipsum About Rice Balls Lorem Ipsum About Rice Balls Lorem Ipsum About Rice Balls Lorem Ipsum About Rice Balls", cost:14},
-            {desc:"Shrimp Scampi*Lorem Ipsudm About Shrimp Scampi Lorem Ipsudm About Shrimp Scampi Lorem Ipsudm About Shrimp Scampi Lorem Ipsudm About Shrimp Scampi Lorem Ipsudm About Shrimp Scampi", cost:24.75},
-            {desc:"Shrimp Scampi*Lorem Ipsum About Shrismp Scampi", cost:24.75},
-            {desc:"Shrimp Scampi*Lorems Ipsum About Shrimp Scampi", cost:24.75},
-            {desc:"Shrimdp Scampi*Loresm fIpsum About Shrimp Scampi", cost:24.75},
+            {desc:"Rice Balls*Lorem Ipsum About Rice Balls", cost:14},
+            {desc:"Chicken Parm*Lorem Ipsum About Chicken Parm", cost:21.50},
+            {desc:"Shrimp Scampi*Lorem Ipsum About Shrimp Scampi", cost:24.75},
             
         ]},
         {id: "fro", room: "300", created: 1000, status: "Processing", requestedOffering: [
@@ -78,73 +91,8 @@ export default function CompletedOrders(){
             {desc:"Rice Balls*Lorem Ipsum About Rice Balls Lorem Ipsum About Rice Balls Lorem Ipsum About Rice Balls Lorem Ipsum About Rice Balls Lorem Ipsum About Rice Balls Lorem Ipsum About Rice Balls Lorem Ipsum About Rice Balls Lorem Ipsum About Rice Balls Lorem Ipsum About Rice Balls Lorem Ipsum About Rice Balls Lorem Ipsum About Rice Balls Lorem Ipsum About Rice Balls", cost:14},
         ]},{id: "fre", room: "300", created: 1000, status: "Cancelled", requestedOffering: [
             {desc:"Shrimp Scampi*Lorem Ipsum About Shrismp Scampi", cost:24.75},
-            {desc:"Shrimp Scampi*Lorems Ipsum About Shrimp Scampi", cost:24.75},
-            {desc:"Shrimdp Scampi*Loresm fIpsum About Shrimp Scampi", cost:24.75}
-        ]},
-        {id: "dfsa", room: "300", created: 1000, status: "Processing", requestedOffering: [
-            {desc:"Chicken Parm*Lorem Ipsum About Chicken Parm", cost:21.50}
-        ]},
-        {id: ",kiiuy", room: "300", created: 1000, status: "Processing", requestedOffering: [
-            {desc:"Chicken Parm*Lorem Ipsum About Chicken Parm", cost:21.50}
-        ]},
-        {id: "ewqr", room: "300", created: 1000, status: "Processing", requestedOffering: [
-            {desc:"Chicken Parm*Lorem Ipsum About Chicken Parm", cost:21.50}
-        ]},
-        {id: "xcvb", room: "300", created: 1000, status: "Processing", requestedOffering: [
-            {desc:"Chicken Parm*Lorem Ipsum About Chicken Parm", cost:21.50}
-        ]},
-        {id: "asd", room: "300", created: 1000, status: "Processing", requestedOffering: [
-            {desc:"Chicken Parm*Lorem Ipsum About Chicken Parm", cost:21.50}
-        ]},
-        {id: "adsfg", room: "300", created: 1000, status: "Processing", requestedOffering: [
-            {desc:"Chicken Parm*Lorem Ipsum About Chicken Parm", cost:21.50}
-        ]},
-        {id: "lioui", room: "300", created: 1000, status: "Processing", requestedOffering: [
-            {desc:"Chicken Parm*Lorem Ipsum About Chicken Parm", cost:21.50}
-        ]},
-        {id: "foo", room: "300", created: 1000, status: "Ordered", requestedOffering: [
-            {desc:"Chicken Parm*Lorem Ipsum About Chicken Parm", cost:21.50},
-            {desc:"Shrimp Scampi*Lorem Ipsum About Shrimp Scampi", cost:24.75},
-            {desc:"Rice Balls*Lorem Ipsum About Rice Balls Lorem Ipsum About Rice Balls Lorem Ipsum About Rice Balls Lorem Ipsum About Rice Balls Lorem Ipsum About Rice Balls Lorem Ipsum About Rice Balls Lorem Ipsum About Rice Balls Lorem Ipsum About Rice Balls Lorem Ipsum About Rice Balls Lorem Ipsum About Rice Balls Lorem Ipsum About Rice Balls Lorem Ipsum About Rice Balls", cost:14},
-            {desc:"Shrimp Scampi*Lorem Ipsudm About Shrimp Scampi Lorem Ipsudm About Shrimp Scampi Lorem Ipsudm About Shrimp Scampi Lorem Ipsudm About Shrimp Scampi Lorem Ipsudm About Shrimp Scampi", cost:24.75},
             {desc:"Shrimp Scampi*Lorem Ipsum About Shrismp Scampi", cost:24.75},
-            {desc:"Shrimp Scampi*Lorems Ipsum About Shrimp Scampi", cost:24.75},
-            {desc:"Shrimdp Scampi*Loresm fIpsum About Shrimp Scampi", cost:24.75}
-        ]},
-        {id: "fro", room: "300", created: 1000, status: "Processing", requestedOffering: [
-            {desc:"Chicken Parm*Lorem Ipsum About Chicken Parm", cost:21.50}
-        ]},
-        {id: "fru", room: "300", created: 1000, status: "Completed", requestedOffering: [
-            {desc:"Shrimp Scampi*Lorem Ipsum About Shrimp Scampi", cost:24.75}
-        ]},{id: "fra", room: "300", created: 1000, status: "Completed", requestedOffering: [
-            {desc:"Chicken Parm*Lorem Ipsum About Chicken Parm", cost:21.50},
-            {desc:"Shrimp Scampi*Lorem Ipsum About Shrimp Scampi", cost:24.75},
-            {desc:"Rice Balls*Lorem Ipsum About Rice Balls Lorem Ipsum About Rice Balls Lorem Ipsum About Rice Balls Lorem Ipsum About Rice Balls Lorem Ipsum About Rice Balls Lorem Ipsum About Rice Balls Lorem Ipsum About Rice Balls Lorem Ipsum About Rice Balls Lorem Ipsum About Rice Balls Lorem Ipsum About Rice Balls Lorem Ipsum About Rice Balls Lorem Ipsum About Rice Balls", cost:14},
-        ]},{id: "fre", room: "300", created: 1000, status: "Cancelled", requestedOffering: [
-            {desc:"Shrimp Scampi*Lorem Ipsum About Shrismp Scampi", cost:24.75},
-            {desc:"Shrimp Scampi*Lorems Ipsum About Shrimp Scampi", cost:24.75},
-            {desc:"Shrimdp Scampi*Loresm fIpsum About Shrimp Scampi", cost:24.75}
-        ]},
-        {id: "dfsa", room: "300", created: 1000, status: "Processing", requestedOffering: [
-            {desc:"Chicken Parm*Lorem Ipsum About Chicken Parm", cost:21.50}
-        ]},
-        {id: ",kiiuy", room: "300", created: 1000, status: "Processing", requestedOffering: [
-            {desc:"Chicken Parm*Lorem Ipsum About Chicken Parm", cost:21.50}
-        ]},
-        {id: "ewqr", room: "300", created: 1000, status: "Processing", requestedOffering: [
-            {desc:"Chicken Parm*Lorem Ipsum About Chicken Parm", cost:21.50}
-        ]},
-        {id: "xcvb", room: "300", created: 1000, status: "Processing", requestedOffering: [
-            {desc:"Chicken Parm*Lorem Ipsum About Chicken Parm", cost:21.50}
-        ]},
-        {id: "asd", room: "300", created: 1000, status: "Processing", requestedOffering: [
-            {desc:"Chicken Parm*Lorem Ipsum About Chicken Parm", cost:21.50}
-        ]},
-        {id: "adsfg", room: "300", created: 1000, status: "Processing", requestedOffering: [
-            {desc:"Chicken Parm*Lorem Ipsum About Chicken Parm", cost:21.50}
-        ]},
-        {id: "lioui", room: "300", created: 1000, status: "Processing", requestedOffering: [
-            {desc:"Chicken Parm*Lorem Ipsum About Chicken Parm", cost:21.50}
+            {desc:"Shrimp Scampi*Lorem Ipsum About Shrismp Scampi", cost:24.75}
         ]},
     ]
 
@@ -160,21 +108,15 @@ export default function CompletedOrders(){
         <View style={{height:scrHeight-50, width:scrWidth, paddingTop:30, alignItems:"center", backgroundColor:"#aaa"}}>
             <Text>Completed orders component</Text>
             <View style={{alignItems:"center", width:scrWidth, height:scrHeight-100}}>
-                <ScrollView style={{maxHeight:scrHeight, width:scrWidth-100}} nestedScrollEnabled={true}>
-                    <Accordion sectionContainerStyle={styles.accordItem} activeSections={activeSections} sections={dummy} renderSectionTitle={renderTitle} renderHeader={renderHeader} renderContent={renderContent} onChange={(section:any) =>{updateSections(section)}} expandMultiple={true}/>
-                </ScrollView>
+                <Accordion containerStyle={{}} sectionContainerStyle={styles.accordItem} activeSections={activeSections} sections={dummy} renderSectionTitle={renderTitle} renderHeader={renderHeader} renderContent={renderContent} onChange={(section:any) =>{updateSections(section)}} expandMultiple={false} renderAsFlatList={true}/>
             </View>
         </View>
     )
 }
 
-function serviceItem(props:{request:ServiceRequest}){
-    const [visible,setVisible] = useState(false);
-}
-
 const styles = StyleSheet.create({
     accordItem:{
-        maxHeight:250,
-        overflow:"hidden",
+        overflow:"visible",
+        paddingVertical:3,
     }
 })

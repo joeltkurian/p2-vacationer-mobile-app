@@ -11,6 +11,7 @@ export default function RoomServiceComponent(){
 
     const [visibleComponent,setVisibleComponent] = useState(0);
 
+
     function setComponent(num:number){
         setVisibleComponent(num);
     }
@@ -18,7 +19,7 @@ export default function RoomServiceComponent(){
     return(
         <View style={styles.container}>
             {visibleComponent < 1 ? <CreateOrderComponent/> 
-            :visibleComponent === 1 ? <CartComponent/> 
+            :visibleComponent === 1 ? <CartComponent off={[]} setOff={() => {}}/> 
             :<CompletedOrders/>}
             <View style={{width:scrWidth, flexDirection:"row", alignSelf:"flex-end", alignItems:"center", justifyContent:"center"}}>
                 <View style={{flexDirection:"row", width:"100%", justifyContent:"space-evenly", height:37}}>

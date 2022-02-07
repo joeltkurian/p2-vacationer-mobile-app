@@ -7,11 +7,9 @@ export default function CreateOrderComponent(){
     const dummy:Offering[] = [
         {desc:"Chicken Parm*Lorem Ipsum About Chicken Parm", cost:21.50},
         {desc:"Shrimp Scampi*Lorem Ipsum About Shrimp Scampi", cost:24.75},
-        {desc:"Rice Balls*Lorem Ipsum About Rice Balls Lorem Ipsum About Rice Balls Lorem Ipsum About Rice Balls Lorem Ipsum About Rice Balls Lorem Ipsum About Rice Balls Lorem Ipsum About Rice Balls Lorem Ipsum About Rice Balls Lorem Ipsum About Rice Balls Lorem Ipsum About Rice Balls Lorem Ipsum About Rice Balls Lorem Ipsum About Rice Balls Lorem Ipsum About Rice Balls", cost:14},
-        {desc:"Shrimp Scampi*Lorem Ipsudm About Shrimp Scampi Lorem Ipsudm About Shrimp Scampi Lorem Ipsudm About Shrimp Scampi Lorem Ipsudm About Shrimp Scampi Lorem Ipsudm About Shrimp Scampi", cost:24.75},
-        {desc:"Shrimp Scampi*Lorem Ipsum About Shrismp Scampi", cost:24.75},
-        {desc:"Shrimp Scampi*Lorems Ipsum About Shrimp Scampi", cost:24.75},
-        {desc:"Shrimdp Scampi*Loresm fIpsum About Shrimp Scampi", cost:24.75},
+        {desc:"Rice Balls*Lorem Ipsum About Rice Balls", cost:14},
+        {desc:"Spaghetti and Meatballs*Lorem Ipsudm About Spaghetti and Meatballs", cost:19.80},
+        {desc:"12 oz. Ribeye*Loresm fIpsum About Ribeye Steak", cost:24.75},
 
     ];
 

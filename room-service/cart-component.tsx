@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { Dimensions, Text, View, Image, Button, FlatList } from "react-native";
+import { Dimensions, Text, View, Image, Button, FlatList, Platform, ToastAndroid } from "react-native";
 import { Offering, Offerings } from "../dtos";
 
 export default function CartComponent(props:{off:Offering[], setOff:Function}){
 
     const [offerings,setOfferings] = useState<Offerings>({items:[], quantities:[]});
+
+    const cart:Offering[] = props.off;
+    const setCart:Function = props.setOff;
 
     const dummy:Offering[] = [
         {desc:"Chicken Parm*Lorem Ipsum About Chicken Parm", cost:21.50},
@@ -14,27 +17,27 @@ export default function CartComponent(props:{off:Offering[], setOff:Function}){
         {desc:"Shrimp Scampi*Lorem Ipsum About Shrimp Scampi", cost:24.75},
         {desc:"Rice Balls*Lorem Ipsum About Rice Balls", cost:14},
         {desc:"Chicken Parm*Lorem Ipsum About Chicken Parm", cost:21.50},
-        {desc:"Shrimp Scampi*Lorem Ipsum About Shrimp Scampi", cost:24.75},
+        {desc:"Shrimp Scampi*Lorem Ipsum About Shrimp Scampi", cost:24.75},  
     ];
 
     function convert(off:Offering[]):Offerings{
-        let cart:Offerings={items:[], quantities:[]};
+        let myCart:Offerings={items:[], quantities:[]};
 
         for(const i of off){
-            const index = cart.items.findIndex(c => c.desc === i.desc)
+            const index = myCart.items.findIndex(c => c.desc === i.desc)
             if(index != -1){
-                cart.quantities[index]+=1;
+                myCart.quantities[index]+=1;
             }else{
-                cart.items.push(i);
-                cart.quantities.push(1);
+                myCart.items.push(i);
+                myCart.quantities.push(1);
             }
         }
-        return cart;
+        return myCart;
     }
 
     useEffect(()=>{
-        setOfferings(convert(dummy));
-    },[])
+        setOfferings(convert(props.off));
+    },[props.off])
 
     const scrWidth = Dimensions.get('window').width;
     const scrHeight = Dimensions.get('window').height;
@@ -48,12 +51,12 @@ export default function CartComponent(props:{off:Offering[], setOff:Function}){
     }
     
     return(
-        <View style={{alignContent:"center", paddingHorizontal:2, justifyContent:"flex-start"}}>
+        <View style={{maxHeight:scrHeight, height:"100%", width:scrWidth, alignItems:"center", paddingTop:20}}>
             <Text style={{alignSelf:"center"}}>Cart Component</Text>
             <FlatList data={offerings.items} renderItem={({item, index}) => offeringItem({off:item, qty:offerings.quantities[index]})} keyExtractor={(item) => item.desc}/>
             <Text style={{alignSelf:"center"}}>Total: ${total(offerings).toFixed(2)}</Text>
-            <View style={{width:scrWidth-80, alignSelf:"center", paddingBottom:10}}>
-            <Button onPress={() => {}} title="Place Order"></Button>
+            <View style={{width:scrWidth-80, alignSelf:"center",}}>
+            <Button onPress={() => {Platform.OS === 'android'? ToastAndroid.show("Order Submitted!", ToastAndroid.SHORT) :alert("Order submitted!")}} title="Place Order"></Button>
             </View>
         </View>
     )
@@ -77,7 +80,17 @@ export default function CartComponent(props:{off:Offering[], setOff:Function}){
                     <View style={{flexDirection:"row", justifyContent:"space-between", alignItems:"center", width:scrWidth-130-20}}>
                         <Text>{"$" + (cost*props.qty).toFixed(2)}</Text>
                         <Text>x{props.qty}</Text>
-                        <Button onPress={()=>{}} title="Remove"></Button>
+                        <Button onPress={()=>{
+                            for(let i = 0; i < cart.length; i++){
+                                if(cart[i] === props.off){
+                                    cart.splice(i,1);
+                                    break;
+                                }
+                            }
+                            setCart(cart);
+                            setOfferings(convert(cart))
+                            Platform.OS === 'android'? ToastAndroid.show("Item Removed from Cart", ToastAndroid.SHORT) :alert("Item Removed from Cart")
+                            }} title="Remove"></Button>
                     </View>
                 </View>
             </View>

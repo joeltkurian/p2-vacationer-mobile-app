@@ -1,8 +1,10 @@
 import React from "react";
-import { Text, View, Image, Button, FlatList, Dimensions } from "react-native";
+import { Text, View, Image, Button, FlatList, Dimensions, Platform, ToastAndroid } from "react-native";
+import { isPropertyAccessChain } from "typescript";
 import { Offering } from '../dtos';
+import CartComponent from "./cart-component";
 
-export default function CreateOrderComponent(){
+export default function CreateOrderComponent(props:{off:Offering[], setOff:Function}){
 
     const dummy:Offering[] = [
         {desc:"Chicken Parm*Lorem Ipsum About Chicken Parm", cost:21.50},
@@ -10,19 +12,20 @@ export default function CreateOrderComponent(){
         {desc:"Rice Balls*Lorem Ipsum About Rice Balls", cost:14},
         {desc:"Spaghetti and Meatballs*Lorem Ipsudm About Spaghetti and Meatballs", cost:19.80},
         {desc:"12 oz. Ribeye*Loresm fIpsum About Ribeye Steak", cost:24.75},
-
     ];
 
     const scrWidth = Dimensions.get('window').width;
     const scrHeight = Dimensions.get('window').height;
+    const cart:Offering[] = props.off;
+    const updateCart:Function = props.setOff;
 
     return(
-        <View style={{ width:scrWidth, alignContent:"center", paddingHorizontal:2, justifyContent:"flex-start"}}>
+        <View style={{ width:scrWidth, alignContent:"center", paddingHorizontal:2, justifyContent:"flex-start", paddingTop:30}}>
             <Text style={{alignSelf:"center"}}>Create Order Component</Text>
             <FlatList data={dummy} renderItem={({item}) => offeringItem({off:item})} keyExtractor={item => item.desc}/>
         </View>
     )
-}
+
 
 function offeringItem(props:{off:Offering}){
     const {desc, cost} = props.off;
@@ -41,9 +44,10 @@ function offeringItem(props:{off:Offering}){
                 <Text style={{maxHeight:70}}>{descr}</Text>
                 <View style={{flexDirection:"row", justifyContent:"space-between", alignItems:"center", width:scrWidth-130-20}}>
                     <Text>{"$" + cost.toFixed(2)}</Text>
-                    <Button onPress={()=>{}} title="Add to Order"></Button>
+                    <Button onPress={()=>{cart.push(props.off); updateCart(cart); Platform.OS === 'android'? ToastAndroid.show("Item Added to Cart", ToastAndroid.SHORT) :alert("Item Added to Cart")}} title="Add to Order"></Button>
                 </View>
             </View>
         </View>
     )
+}
 }

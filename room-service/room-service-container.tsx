@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { StyleSheet, View, Button } from "react-native";
+import { StyleSheet, View, Button, ToastAndroid, Platform } from "react-native";
+import { Offering } from "../dtos";
 import CartComponent from "./cart-component";
 import CompletedOrders from "./completed-orders";
 import CreateOrderComponent from "./create-order-component";
@@ -11,24 +12,25 @@ export default function RoomServiceComponent(){
 
     const [visibleComponent,setVisibleComponent] = useState(0);
 
+    const [cart, setCart] = useState<Offering[]>([]);
+
 
     function setComponent(num:number){
         setVisibleComponent(num);
     }
 
-    return(
+    return(<>
         <View style={styles.container}>
-            {visibleComponent < 1 ? <CreateOrderComponent/> 
-            :visibleComponent === 1 ? <CartComponent off={[]} setOff={() => {}}/> 
+            {visibleComponent < 1 ? <CreateOrderComponent off={cart} setOff={setCart}/> 
+            :visibleComponent === 1 ? <CartComponent off={cart} setOff={setCart}/> 
             :<CompletedOrders/>}
-            <View style={{width:scrWidth, flexDirection:"row", alignSelf:"flex-end", alignItems:"center", justifyContent:"center"}}>
-                <View style={{flexDirection:"row", width:"100%", justifyContent:"space-evenly", height:37}}>
-                <Button onPress={() =>{setComponent(0)}} title="Create an Order"></Button>
-                <Button onPress={() =>{setComponent(1)}} title="Cart"></Button>
-                <Button onPress={() =>{setComponent(2)}} title="My Orders"></Button>
-                </View>
-            </View>
         </View>
+        <View style={{width:scrWidth, flexDirection:"row", alignSelf:"flex-end",  height:60, justifyContent:"space-between", alignItems:"center", paddingHorizontal:20}}>
+            <Button onPress={() =>{setComponent(0)}} title="Create an Order"></Button>
+            <Button onPress={() =>{setComponent(1)}} title="Cart"></Button>
+            <Button onPress={() =>{setComponent(2)}} title="My Orders"></Button>
+    </View>
+    </>
     )
 }
 
@@ -40,11 +42,9 @@ const styles = StyleSheet.create({
         display: "flex",
         flexDirection:"column",
         backgroundColor: '#fff',
-        alignItems: 'center',
-        alignContent: 'center',
         justifyContent: 'center',
-        paddingTop:70,
-        height:scrHeight,
+        height:"100%",
+        maxHeight:scrHeight-50,
         width:scrWidth
       },
 });

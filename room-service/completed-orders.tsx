@@ -105,9 +105,9 @@ export default function CompletedOrders(){
     }
 
     return(
-        <View style={{height:scrHeight-50, width:scrWidth, paddingTop:30, alignItems:"center", backgroundColor:"#aaa"}}>
+        <View style={{maxHeight:scrHeight, width:scrWidth, alignItems:"center", paddingTop:30}}>
             <Text>Completed orders component</Text>
-            <View style={{alignItems:"center", width:scrWidth, height:scrHeight-100}}>
+            <View style={{alignItems:"center", width:scrWidth, maxHeight:scrHeight, height:"100%"}}>
                 <Accordion containerStyle={{}} sectionContainerStyle={styles.accordItem} activeSections={activeSections} sections={dummy} renderSectionTitle={renderTitle} renderHeader={renderHeader} renderContent={renderContent} onChange={(section:any) =>{updateSections(section)}} expandMultiple={false} renderAsFlatList={true}/>
             </View>
         </View>

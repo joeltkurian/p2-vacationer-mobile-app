@@ -106,6 +106,7 @@ export default function ComplaintView(){
                     photoLink: undefined
                 })}></TextInput>
             </View>
+            <View style={styles.buttonView}>
             {/* form buttons */}
             <TouchableOpacity style={styles.button} onPress={addPhoto}>
                 <Text>Add Photo</Text>
@@ -113,6 +114,7 @@ export default function ComplaintView(){
             <TouchableOpacity style={styles.button} onPress={addComplaint}>
                 <Text>Submit</Text>
             </TouchableOpacity>
+            </View>
             
         </View>
         }
@@ -169,6 +171,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-evenly',
         alignItems: 'center',
+        
         height: 50,
         marginHorizontal: 20,
         marginTop: 5,

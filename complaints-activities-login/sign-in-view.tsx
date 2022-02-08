@@ -10,7 +10,7 @@ export default function SignInView(props:{user:{id:String,isAuthenticated:Boolea
         //setUser instead of setID
         let isAuth = false;
 
-        //if(id === "69420") 
+        if(id === "69420") 
             isAuth = true
         
             props.updateUser({id:id,isAuthenticated:isAuth})
@@ -34,13 +34,13 @@ export default function SignInView(props:{user:{id:String,isAuthenticated:Boolea
 const styles = StyleSheet.create({
     container: {
       flex: .3,
-      backgroundColor: '#ceb007',
+      backgroundColor: 'rgba(206, 176, 7, 1)',
       justifyContent: 'center',
       paddingRight: 20,    
       paddingLeft: 20,
     },
     viewbutton: {
-        backgroundColor: '#B68602',
+        backgroundColor: 'rgba(182, 134, 2, 1)',
         textAlign: 'center',
     },
     header: {

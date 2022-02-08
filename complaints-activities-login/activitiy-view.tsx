@@ -58,7 +58,7 @@ export default function ActivitiyView(){
 const styles = StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: '#ceb007',
+      backgroundColor: 'rgba(206, 176, 7, 1)',
       justifyContent: 'center',
       paddingRight: 20,    
       paddingLeft: 20,
@@ -67,7 +67,7 @@ const styles = StyleSheet.create({
     },
     item: {
         flex: 1,
-        backgroundColor: '#f7ee7b',
+        backgroundColor: 'rgba(247, 238, 123, 1)',
         padding: 20,
         marginVertical: 8,
         marginHorizontal: 16,

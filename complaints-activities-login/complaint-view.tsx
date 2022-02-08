@@ -138,14 +138,14 @@ export default function ComplaintView(){
 const styles = StyleSheet.create({
     container: {
       flex: .95,
-      backgroundColor: '#ceb007',
+      backgroundColor: 'rgba(206, 176, 7, 1)',
       justifyContent: 'center',
       paddingRight: 20,    
       paddingLeft: 20
     },
     item: {
         flex: 1,
-        backgroundColor: '#f7ee7b',
+        backgroundColor: 'rgba(247, 238, 123, 1)',
         padding: 20,
         marginVertical: 8,
         marginHorizontal: 16,
@@ -175,16 +175,16 @@ const styles = StyleSheet.create({
         height: 50,
         marginHorizontal: 20,
         marginTop: 5,
-        backgroundColor: '#f7ee7b'
+        backgroundColor: 'rgba(247, 238, 123, 1)'
     },
     button:{
         alignItems: 'center',
         width:150,
-        backgroundColor: '#B68602'
+        backgroundColor: 'rgba(182, 134, 2, 1)'
     },
     form: {
         flex: .3, 
-        backgroundColor: '#f7ee7b'
+        backgroundColor: 'rgba(247, 238, 123, 1)'
     },
     input: {
         flex: 1,
@@ -192,6 +192,6 @@ const styles = StyleSheet.create({
         height: '100%',
         marginVertical: 8,
         marginHorizontal: 16,
-        backgroundColor: '#fcffe9',
+        backgroundColor: 'rgba(252, 255, 233, 1)',
     }
 });

@@ -10,9 +10,10 @@ export default function SignInView(props:{user:{id:String,isAuthenticated:Boolea
         //setUser instead of setID
         let isAuth = false;
 
-        if(id === "69420") isAuth = true
-
-        props.updateUser({id:id,isAuthenticated:isAuth})
+        if(id === "69420") 
+            isAuth = true
+        
+            props.updateUser({id:id,isAuthenticated:isAuth})
     }
 
     return(<View style={styles.container}>
@@ -33,13 +34,13 @@ export default function SignInView(props:{user:{id:String,isAuthenticated:Boolea
 const styles = StyleSheet.create({
     container: {
       flex: .3,
-      backgroundColor: '#ffeeff',
+      backgroundColor: 'rgba(206, 176, 7, 1)',
       justifyContent: 'center',
       paddingRight: 20,    
       paddingLeft: 20,
     },
     viewbutton: {
-        backgroundColor: '#abcdef',
+        backgroundColor: 'rgba(182, 134, 2, 1)',
         textAlign: 'center',
     },
     header: {

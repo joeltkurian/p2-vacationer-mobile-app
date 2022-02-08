@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { StyleSheet, View, Button, ToastAndroid, Platform } from "react-native";
+import { StyleSheet, View, Button} from "react-native";
 import { Offering } from "../dtos";
 import CartComponent from "./cart-component";
 import CompletedOrders from "./completed-orders";

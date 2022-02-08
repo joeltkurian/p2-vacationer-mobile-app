@@ -18,26 +18,21 @@ export default function CompletedOrders(){
 
     function renderHeader(section:ServiceRequest){
         return(
-            <View style={{padding:5, backgroundColor:section.status === 'Ordered'? "#0ff9":section.status === 'Processing' ? "#00f9":section.status === 'Cancelled'?"#f009":"#0f09", height:30}}>
-                <Text style={{alignSelf:"center"}}>Room #: {section.room}</Text>
+            <View style={{ flexDirection:"row", padding:5, backgroundColor:section.status === 'Ordered'? "#0ff9":section.status === 'Processing' ? "#00f9":section.status === 'Cancelled'?"#f009":"#0f09", height:30, justifyContent:"space-between"}}>
+                <Text style={{alignSelf:"flex-start"}}>Room #: {section.room}</Text>
+                <Text style={{alignSelf:"flex-end"}}>Status: {section.status}</Text>
             </View>
         )
     }
 
     function renderContent(section:ServiceRequest){
-        
-        const bill = total(section.requestedOffering);
-        const condensed = convert(section.requestedOffering);
 
-        function renderItem(props:{offering:Offering, quantity:number}){
-            const {desc, cost} = props.offering;
-            const [title, rest] = desc.split('*');
-            return(
-                <View style={{flexDirection:"row", justifyContent:"space-between"}}>
-                    <Text>{title}:</Text>
-                    <Text>x{props.quantity}     ${(cost*props.quantity).toFixed(2)}</Text>
-                </View>
-            )
+        function total(offerings:Offering[]){
+            let sum = 0;
+            for(let off of offerings){
+                sum += off.cost;
+            }
+            return sum;
         }
 
         function convert(off:Offering[]):Offerings{
@@ -53,6 +48,20 @@ export default function CompletedOrders(){
                 }
             }
             return cart;
+        }
+        
+        const bill = total(section.requestedOffering);
+        const condensed = convert(section.requestedOffering);
+
+        function renderItem(props:{offering:Offering, quantity:number}){
+            const {desc, cost} = props.offering;
+            const [title, rest] = desc.split('*');
+            return(
+                <View style={{flexDirection:"row", justifyContent:"space-between"}}>
+                    <Text>{title}:</Text>
+                    <Text>x{props.quantity}     ${(cost*props.quantity).toFixed(2)}</Text>
+                </View>
+            )
         }
 
         return(
@@ -96,13 +105,7 @@ export default function CompletedOrders(){
         ]},
     ]
 
-    function total(offerings:Offering[]){
-        let sum = 0;
-        for(let off of offerings){
-            sum += off.cost;
-        }
-        return sum;
-    }
+    
 
     return(
         <View style={{maxHeight:scrHeight, width:scrWidth, alignItems:"center", paddingTop:30}}>

@@ -1,21 +1,11 @@
-import { StatusBar } from 'expo-status-bar';
+import { StatusBar } from 'react-native';
 import { StyleSheet, Text, View } from 'react-native';
-import SignInView from './components/sign-in-view';
+import RoomServiceComponent from './room-service/room-service-container';
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <SignInView/>
-      <StatusBar style="auto" />
+    <View>
+      <RoomServiceComponent/>
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});

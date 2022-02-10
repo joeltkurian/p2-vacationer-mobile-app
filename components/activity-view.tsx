@@ -1,25 +1,23 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FlatList, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+
 
 export default function ActivityView() {
     const [activities, setActivities] = useState([
-        { id: "1", title: "NAME", desc: "DESCRIPTION", startTime: 0, endTime: 1, location: "HERE", status: "On Schedule" },
-        { id: "2", title: "Death Ray Competition", desc: "Test your photon beams against live targets in this last-one-standing colloseum-type deathmatch. Perfect for the kids.", startTime: "RIGHT NOW", endTime: "NEVER", location: "Colloseum", status: "On Schedule" },
-        { id: "3", title: "Lazy Blood River", desc: "Let your superhero worries melt away as the literal blood of our enemies rejuvinates your skin and replenishes your iron content.", startTime: "RIGHT NOW", endTime: "NEVER", location: "Colloseum", status: "On Schedule" },
-        { id: "4", title: "NAME", desc: "DESCRIPTION", startTime: 0, endTime: 1, location: "HERE", status: "On Schedule" },
-        { id: "5", title: "NAME", desc: "DESCRIPTION", startTime: 0, endTime: 1, location: "HERE", status: "On Schedule" },
-        { id: "6", title: "NAME", desc: "DESCRIPTION", startTime: 0, endTime: 1, location: "HERE", status: "On Schedule" },
-        { id: "7", title: "NAME", desc: "DESCRIPTION", startTime: 0, endTime: 1, location: "HERE", status: "On Schedule" },
-        { id: "8", title: "NAME", desc: "DESCRIPTION", startTime: 0, endTime: 1, location: "HERE", status: "On Schedule" },
-        { id: "9", title: "NAME", desc: "DESCRIPTION", startTime: 0, endTime: 1, location: "HERE", status: "On Schedule" },
-        { id: "10", title: "NAME", desc: "DESCRIPTION", startTime: 0, endTime: 1, location: "HERE", status: "On Schedule" }
+        { id: "1", title: "NAME", desc: "DESCRIPTION", startTime: 0, endTime: 1, location: "HERE", status: "On Schedule" }
     ])
 
-    function getActivites() {
-        //make an actual login request
-        //setUser instead of setID
+    async function getActivites() {
+        const response = await fetch('http://20.121.74.219:3000/activities')
+        const fetchedActivities = await response.json();
+
+        setActivities(fetchedActivities);
 
     }
+
+    useEffect(()=>{
+        getActivites();
+    }, [])
 
     return (<View style={styles.container}>
         <View style={styles.flatlist}>

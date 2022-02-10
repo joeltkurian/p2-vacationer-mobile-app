@@ -8,16 +8,6 @@ export default function ComplaintView() {
 
     const [focus, setFocus] = useState(true)
 
-    //dummy data for now
-    const [complaints, setComplaints] = useState([
-        { id: "1", submittedTime: 0, desc: "My gun didnt shoot and I ended up dying, now the series can't continue", status: "Unreviewed", photoLink: "" },
-        { id: "2", submittedTime: 8, desc: "TEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEXT", status: "Unreviewed" },
-        { id: "3", submittedTime: 12, desc: "desc", status: "Unreviewed", photoLink: NaN }, //this one isn't falsy, neat
-        { id: "4", submittedTime: 17, desc: "movie quote", status: "Unreviewed", photoLink: null },
-        { id: "5", submittedTime: 5, desc: "pop culture reference", status: "Unreviewed", photoLink: undefined },
-
-    ])
-
     //complaint to be added
     const [complaint, setComplaint] = useState({
         id: "",
@@ -29,10 +19,10 @@ export default function ComplaintView() {
 
     function addComplaint() {
         if (complaint.desc != "") {
+            //look up how to set this up vvv
             //Platform.OS === 'android'? ToastAndroid.show("Item Added to Cart", ToastAndroid.SHORT) :alert("Item Added to Cart")
 
             Alert.alert("Complaint " + complaint.desc + " added!")
-            viewNav();
         }
     }
 
@@ -40,53 +30,7 @@ export default function ComplaintView() {
         console.log("wow nice photo")
     }
 
-    function viewNav() {
-        setFocus(true);
-    }
-
-    function formNav() {
-        //do both so it refreshes
-
-        setFocus(false);
-    }
-
-    useEffect(() => {
-        viewNav();
-    }, [complaints])
-
     return (<View style={styles.container}>
-        {!!focus ?
-            <View style={styles.containerFlatList}>
-                <FlatList
-                    data={complaints}
-                    renderItem={({ item }) => (
-                        <TouchableOpacity style={styles.item}>
-
-                            <Text style={styles.title}>{item.status}</Text>
-
-                            <View style={{ flexDirection: 'row' }}>
-                                {/* Image View ONLY if it has an image*/}
-                                {!!item.photoLink?.toString ?
-                                    <View style={{ height: 100, width: 100, backgroundColor: 'red' }}></View>
-                                    :
-                                    <></>
-                                }
-                                {/* ^^ if no image, display nothing ^^ */}
-                                {/* vv Description/Status View vv */}
-                                <View>
-                                    <Text style={styles.desc}>DESCRIPTION: {item.desc}</Text>
-                                    <Text style={styles.desc}>Time Sumbitted: {item.submittedTime}</Text>
-                                    <Text>{"\n"}</Text>
-                                    <Text style={styles.timeText}>Dev only! ID: {item.id}</Text>
-                                </View>
-                            </View>
-                        </TouchableOpacity>
-                    )}
-                />
-            </View>
-
-            :
-
             <View style={styles.form}>
                 <Text style={{ fontSize: 24, marginHorizontal: 16 }}>Create A New Complaint: </Text>
                 <Text style={{ marginHorizontal: 16 }}>Description:</Text>
@@ -108,22 +52,7 @@ export default function ComplaintView() {
                         <Text>Submit</Text>
                     </TouchableOpacity>
                 </View>
-
             </View>
-        }
-        <View style={styles.buttonView}>
-
-            {/* make a modal for each */}
-
-            {/* this one's an input form */}
-            <TouchableOpacity style={styles.button} onPress={formNav}>
-                <Text>New Complaint</Text>
-            </TouchableOpacity>
-            {/* this one just displays text, receipt-style */}
-            <TouchableOpacity style={styles.button} onPress={viewNav}>
-                <Text>Past Complaints</Text>
-            </TouchableOpacity>
-        </View>
     </View>);
 
 }

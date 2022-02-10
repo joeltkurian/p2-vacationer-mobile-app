@@ -13,7 +13,7 @@ export default function App() {
       <View style={styles.container}>
     
         {!user.isAuthenticated ? <SignInView user={user} updateUser={setUser} /> :
-          <ComplaintView />
+          <ActivityView/>
         }
         <StatusBar style="auto" />
       </View>

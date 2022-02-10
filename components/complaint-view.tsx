@@ -67,9 +67,7 @@ export default function ComplaintView() {
                             <View style={{ flexDirection: 'row' }}>
                                 {/* Image View ONLY if it has an image*/}
                                 {!!item.photoLink?.toString ?
-                                    <View style={{ backgroundColor: '#f7ee7b' }}>
-                                        <View style={{ height: 100, width: 100, backgroundColor: 'red' }}></View>
-                                    </View>
+                                    <View style={{ height: 100, width: 100, backgroundColor: 'red' }}></View>
                                     :
                                     <></>
                                 }
@@ -100,7 +98,7 @@ export default function ComplaintView() {
                     status: "Unreviewed",
                     photoLink: undefined
                 })} />
-
+                {/* put more space here */}
                 <View style={styles.buttonView}>
                     {/* form buttons */}
                     <TouchableOpacity style={styles.button} onPress={addPhoto}>
@@ -135,7 +133,7 @@ const styles = StyleSheet.create({
         width: '100%',
         height: '100%',
         alignItems: 'center',
-        backgroundColor: 'rgba(206, 176, 7, 1)',
+        backgroundColor: 'rgba(206, 176, 7, .7)',
         justifyContent: 'center',
     },
     containerFlatList: {
@@ -145,7 +143,7 @@ const styles = StyleSheet.create({
     },
     item: {
         flex: 1,
-        backgroundColor: 'rgba(247, 238, 123, 1)',
+        backgroundColor: 'rgba(247, 238, 123, .8)',
         padding: 20,
         marginVertical: 8,
         marginHorizontal: 16,
@@ -175,7 +173,7 @@ const styles = StyleSheet.create({
         bottom: 0,
         width: '100%',
         marginTop: 5,
-        backgroundColor: 'rgba(247, 238, 123, 1)'
+        backgroundColor: 'rgba(247, 238, 123, .5)'
     },
     button: {
         alignItems: 'center',

@@ -34,13 +34,13 @@ export default function SignInView(props: { user: { id: String, isAuthenticated:
 const styles = StyleSheet.create({
     container: {
         flex: .3,
-        backgroundColor: 'rgba(206, 176, 7, 1)',
+        backgroundColor: 'rgba(206, 176, 7, .7)',
         justifyContent: 'center',
         paddingRight: 20,
         paddingLeft: 20,
     },
     viewbutton: {
-        backgroundColor: 'rgba(182, 134, 2, 1)',
+        backgroundColor: 'rgba(182, 134, 2, .9)',
         textAlign: 'center',
     },
     header: {

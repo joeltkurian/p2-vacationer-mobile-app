@@ -32,7 +32,7 @@ export default function ActivityView() {
 
                         <View style={{ flexDirection: 'row' }}>
                             {/* Image View */}
-                            <View style={{ backgroundColor: '#ffcab1' }}>
+                            <View style={{ backgroundColor: '#ffcab1', height:120}}>
                                 <View style={{ height: 100, width: 100, backgroundColor: 'red' }}></View>
                                 <Text style={styles.location}>{item.location}</Text>
                             </View>
@@ -56,7 +56,7 @@ export default function ActivityView() {
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: 'rgba(206, 176, 7, 1)',
+        backgroundColor: 'rgba(206, 176, 7, .7)',
         justifyContent: 'center',
         alignItems: 'center',
         height: '100%',
@@ -68,13 +68,16 @@ const styles = StyleSheet.create({
         height: '85%',
         width: '95%'
     },
+    text: {
+        color: 'rgba(100,0,40,1)'
+    },
     item: {
         flex: 1,
-        backgroundColor: 'rgba(247, 238, 123, 1)',
+        backgroundColor: 'rgba(247, 238, 123, .8)',
         padding: 20,
         marginVertical: 8,
         marginHorizontal: 16,
-        height: 200
+        height: 220
 
     },
     title: {
@@ -88,7 +91,7 @@ const styles = StyleSheet.create({
     },
     location: {
         fontSize: 12,
-        textAlign: 'center'
+        textAlign: 'center',
     },
     times: {
         fontSize: 12,

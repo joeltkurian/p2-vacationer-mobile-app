@@ -17,10 +17,8 @@ export default function SignInView(props: { user: { id: String, isAuthenticated:
         try{
         if (id === user.id)
              isAuth = true 
-        else if (id === null)
-            Alert.alert(`User ${id} does not exist.`)
         } catch(error) {
-            console.error('Reservation not found')
+            alert(`User ${id} does not exist.`)
         }
 
         props.updateUser({ id: id, isAuthenticated: isAuth })

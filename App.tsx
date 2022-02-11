@@ -14,8 +14,10 @@ export default function App() {
       <View style={styles.container}>
     
         {!user.isAuthenticated ? <SignInView user={user} updateUser={setUser} /> :
+          // In-app navigation goes here
           // <ActivityView/>
-          <RoomServiceComponent userId={user.id}/>
+          // <RoomServiceComponent userId={user.id}/>
+          <></>
         }
         <StatusBar style="auto" />
       </View>

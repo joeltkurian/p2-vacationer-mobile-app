@@ -87,7 +87,7 @@ export default function CartComponent(props: { off: Offering[], setOff: Function
             room: props.reservation.room,
             created: 0,
             status: "Ordered",
-            requestedOffering: cart
+            requestedOfferings: cart
         };
         const response = await fetch("http://20.121.74.219:3000/servicerequests",{
             method:"POST",

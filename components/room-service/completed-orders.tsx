@@ -3,6 +3,7 @@ import { ServiceRequest, Offering, Offerings, Reservation } from "../../dtos";
 import Accordion from 'react-native-collapsible/Accordion';
 import { scrHeight, scrWidth } from "./dimenstions";
 import { useEffect, useState } from "react";
+import { convertCompilerOptionsFromJson } from "typescript";
 
 export default function CompletedOrders(props:{reservation:Reservation}) {
 
@@ -16,23 +17,25 @@ export default function CompletedOrders(props:{reservation:Reservation}) {
             const response = await fetch('http://20.121.74.219:3000/servicerequests');
             const fullList:ServiceRequest[] = await response.json();
             const filtered:ServiceRequest[] = fullList.filter(item=>item.room === props.reservation.room);
-            console.log(filtered);
             setOrderHistory(filtered);
             alert("orders fetched successfully");
         })();
     },[update])
 
     async function cancelRequest(section:ServiceRequest){
-        const response = await fetch('http://20.121.74.219:3000/servicerequests'+section.id,{
+        const action = {status:"Cancel"};
+        const response = await fetch('http://20.121.74.219:3000/servicerequests/'+section.id,{
             method:"PATCH",
-            body:JSON.stringify({action:"Cancel"}),
+            body:JSON.stringify(action),
             headers:{ 'content-type': 'application/json',
                         'Accept': 'application/json' }
         });
+        const data = await response.json()
         if(response.status === 200){
             setUpdate(!update);
         }
         else{
+            console.log(response);
             alert("Request could not be updated.");
         }
     }
@@ -47,7 +50,7 @@ export default function CompletedOrders(props:{reservation:Reservation}) {
 
     function renderHeader(section: ServiceRequest) {
         return (
-            <View style={{ flexDirection: "row", padding: 5, backgroundColor: section.status === 'Ordered' ? "#0ff9" : section.status === 'Processing' ? "#00f9" : section.status === 'Cancelled' ? "#f009" : "#0f09", height: 30, justifyContent: "space-between" }}>
+            <View style={{ flexDirection: "row", padding: 5, backgroundColor: section.status === 'Ordered' ? "#0ff9" : section.status === 'Processing' ? "#00f9" : section.status === 'Cancel' ? "#f009" : "#0f09", height: 30, justifyContent: "space-between" }}>
                 <Text style={{ alignSelf: "flex-start" }}>Room #: {section.room}</Text>
                 <Text style={{ alignSelf: "flex-end" }}>Status: {section.status}</Text>
                 {section.status === "Ordered" || section.status === "Processing" ? 
@@ -84,8 +87,8 @@ export default function CompletedOrders(props:{reservation:Reservation}) {
             return cart;
         }
 
-        const bill = total(section.requestedOffering);
-        const condensed = convert(section.requestedOffering);
+        const bill = total(section.requestedOfferings);
+        const condensed = convert(section.requestedOfferings);
 
         function renderItem(props: { offering: Offering, quantity: number }) {
             const { desc, cost } = props.offering;

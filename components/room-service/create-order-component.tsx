@@ -1,22 +1,27 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Text, View, Image, Button, FlatList, Dimensions, Platform, ToastAndroid } from "react-native";
 import { Offering } from '../../dtos';
 
 export default function CreateOrderComponent(props: { off: Offering[], setOff: Function }) {
 
-    const dummy: Offering[] = [
-        { desc: "Chicken Parm*Lorem Ipsum About Chicken Parm", cost: 21.50 },
-        { desc: "Shrimp Scampi*Lorem Ipsum About Shrimp Scampi", cost: 24.75 },
-        { desc: "Rice Balls*Lorem Ipsum About Rice Balls", cost: 14 },
-        { desc: "Spaghetti and Meatballs*Lorem Ipsudm About Spaghetti and Meatballs", cost: 19.80 },
-        { desc: "12 oz. Ribeye*Loresm fIpsum About Ribeye Steak", cost: 24.75 },
-    ];
+    const [menu,setMenu] = useState<Offering[]>([]);
 
     const scrWidth = Dimensions.get('window').width;
     const scrHeight = Dimensions.get('window').height;
 
     const cart: Offering[] = props.off;
     const updateCart: Function = props.setOff;
+
+    useEffect(()=>{
+        (async () => {
+            const response = await fetch('http://20.121.74.219:3000/offerings');
+            const menu:Offering[] = await response.json();
+            if(menu.length === 5)
+                setMenu(menu);
+            else
+                alert("Could not Load the Menu from Server!")
+        })()
+    },[])
 
 
     function offeringItem(props: { off: Offering }) {
@@ -46,7 +51,7 @@ export default function CreateOrderComponent(props: { off: Offering[], setOff: F
     return (
         <View style={{ width: scrWidth, alignContent: "center", paddingHorizontal: 2, justifyContent: "flex-start", paddingTop: 30 }}>
             <Text style={{ alignSelf: "center" }}>Create Order Component</Text>
-            <FlatList data={dummy} renderItem={({ item }) => offeringItem({ off: item })} keyExtractor={item => item.desc} />
+            <FlatList data={menu} renderItem={({ item }) => offeringItem({ off: item })} keyExtractor={item => item.desc} />
         </View>
     )
 }

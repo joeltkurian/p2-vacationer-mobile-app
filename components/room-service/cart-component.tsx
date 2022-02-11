@@ -1,24 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { Dimensions, Text, View, Image, Button, FlatList, Platform, ToastAndroid } from "react-native";
-import { Offering, Offerings } from "../../dtos";
+import { Offering, Offerings, Reservation, ServiceRequest } from "../../dtos";
 
-export default function CartComponent(props: { off: Offering[], setOff: Function }) {
+export default function CartComponent(props: { off: Offering[], setOff: Function, reservation:Reservation}) {
 
     const [offerings, setOfferings] = useState<Offerings>({ items: [], quantities: [] });
 
     const cart: Offering[] = props.off;
     const setCart: Function = props.setOff;
-
-    const dummy: Offering[] = [
-        { desc: "Chicken Parm*Lorem Ipsum About Chicken Parm", cost: 21.50 },
-        { desc: "Chicken Parm*Lorem Ipsum About Chicken Parm", cost: 21.50 },
-        { desc: "Chicken Parm*Lorem Ipsum About Chicken Parm", cost: 21.50 },
-        { desc: "Chicken Parm*Lorem Ipsum About Chicken Parm", cost: 21.50 },
-        { desc: "Shrimp Scampi*Lorem Ipsum About Shrimp Scampi", cost: 24.75 },
-        { desc: "Rice Balls*Lorem Ipsum About Rice Balls", cost: 14 },
-        { desc: "Chicken Parm*Lorem Ipsum About Chicken Parm", cost: 21.50 },
-        { desc: "Shrimp Scampi*Lorem Ipsum About Shrimp Scampi", cost: 24.75 },
-    ];
 
     function convert(off: Offering[]): Offerings {
         let myCart: Offerings = { items: [], quantities: [] };
@@ -88,18 +77,45 @@ export default function CartComponent(props: { off: Offering[], setOff: Function
             )
         }
         else {
-            return (<View></View>)
+            return (<></>)
+        }
+    }
+
+    async function submit(){
+        const payload:ServiceRequest = {
+            id: "",
+            room: props.reservation.room,
+            created: 0,
+            status: "Ordered",
+            requestedOffering: cart
+        };
+        const response = await fetch("http://20.121.74.219:3000/servicerequests",{
+            method:"POST",
+            body: JSON.stringify(payload),
+            headers:{"content-type":"application/json"}
+        });
+        if(response.status === 201){
+            Platform.OS === 'android' ? ToastAndroid.show("Order Submitted!", ToastAndroid.SHORT) : alert("Order submitted!")
+            setCart([]);
+            setOfferings({items:[],quantities:[]})
+        }
+        else{
+            alert("Something went wrong");
         }
     }
 
     return (
         <View style={{ height: "98%", width: scrWidth, alignItems: "center", paddingTop: 20 }}>
             <Text style={{ textAlign: "center" }}>Cart Component</Text>
+            {props.off.length === 0 ? <View style={{justifyContent:"center", alignContent:"center", alignItems:"center", height:"100%"}}><Text>Nothing in cart yet!</Text></View> 
+            :<>
             <FlatList data={offerings.items} renderItem={({ item, index }) => offeringItem({ off: item, qty: offerings.quantities[index] })} keyExtractor={(item) => item.desc} />
             <Text style={{ alignSelf: "center" }}>Total: ${total(offerings).toFixed(2)}</Text>
             <View style={{ width: scrWidth - 80, alignSelf: "center", }}>
-                <Button onPress={() => { Platform.OS === 'android' ? ToastAndroid.show("Order Submitted!", ToastAndroid.SHORT) : alert("Order submitted!") }} title="Place Order"></Button>
+                <Button onPress={submit} title="Place Order"></Button>
             </View>
+            </>}
+            
         </View>
     )
 }

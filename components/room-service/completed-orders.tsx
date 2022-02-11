@@ -1,12 +1,42 @@
-import { FlatList, ScrollView, StyleSheet, Text, View } from "react-native";
-import { ServiceRequest, Offering, Offerings } from "../../dtos";
+import { FlatList, Pressable, StyleSheet, Text, View } from "react-native";
+import { ServiceRequest, Offering, Offerings, Reservation } from "../../dtos";
 import Accordion from 'react-native-collapsible/Accordion';
 import { scrHeight, scrWidth } from "./dimenstions";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-export default function CompletedOrders() {
+export default function CompletedOrders(props:{reservation:Reservation}) {
 
     const [activeSections, updateSections] = useState([]);
+
+    const [orderHistory, setOrderHistory] = useState<ServiceRequest[]>([]);
+    const [update,setUpdate] = useState<boolean>(false);
+
+    useEffect(()=>{
+        (async()=>{
+            const response = await fetch('http://20.121.74.219:3000/servicerequests');
+            const fullList:ServiceRequest[] = await response.json();
+            const filtered:ServiceRequest[] = fullList.filter(item=>item.room === props.reservation.room);
+            setOrderHistory(filtered);
+        })();
+    },[update])
+
+    async function cancelRequest(section:ServiceRequest){
+        const action = {status:"Cancel"};
+        const response = await fetch('http://20.121.74.219:3000/servicerequests/'+section.id,{
+            method:"PATCH",
+            body:JSON.stringify(action),
+            headers:{ 'content-type': 'application/json',
+                        'Accept': 'application/json' }
+        });
+        const data = await response.json()
+        if(response.status === 200){
+            setUpdate(!update);
+        }
+        else{
+            console.log(response);
+            alert("Request could not be updated.");
+        }
+    }
 
     function renderTitle(section: ServiceRequest) {
         return (
@@ -18,9 +48,14 @@ export default function CompletedOrders() {
 
     function renderHeader(section: ServiceRequest) {
         return (
-            <View style={{ flexDirection: "row", padding: 5, backgroundColor: section.status === 'Ordered' ? "#0ff9" : section.status === 'Processing' ? "#00f9" : section.status === 'Cancelled' ? "#f009" : "#0f09", height: 30, justifyContent: "space-between" }}>
+            <View style={{ flexDirection: "row", padding: 5, backgroundColor: section.status === 'Ordered' ? "#0ff9" : section.status === 'Processing' ? "#00f9" : section.status === 'Cancel' ? "#f009" : "#0f09", height: 30, justifyContent: "space-between" }}>
                 <Text style={{ alignSelf: "flex-start" }}>Room #: {section.room}</Text>
                 <Text style={{ alignSelf: "flex-end" }}>Status: {section.status}</Text>
+                {section.status === "Ordered" || section.status === "Processing" ? 
+                    <Pressable style={{height:"100%", backgroundColor:"#f009"}} onPress={()=>cancelRequest(section)}>
+                        <Text>Cancel Order</Text>
+                    </Pressable>
+                :<></>}
             </View>
         )
     }
@@ -50,8 +85,8 @@ export default function CompletedOrders() {
             return cart;
         }
 
-        const bill = total(section.requestedOffering);
-        const condensed = convert(section.requestedOffering);
+        const bill = total(section.requestedOfferings);
+        const condensed = convert(section.requestedOfferings);
 
         function renderItem(props: { offering: Offering, quantity: number }) {
             const { desc, cost } = props.offering;
@@ -77,53 +112,14 @@ export default function CompletedOrders() {
         )
     }
 
-    const dummy: ServiceRequest[] = [
-        {
-            id: "foo", room: "300", created: 1000, status: "Ordered", requestedOffering: [
-                { desc: "Chicken Parm*Lorem Ipsum About Chicken Parm", cost: 21.50 },
-                { desc: "Chicken Parm*Lorem Ipsum About Chicken Parm", cost: 21.50 },
-                { desc: "Chicken Parm*Lorem Ipsum About Chicken Parm", cost: 21.50 },
-                { desc: "Chicken Parm*Lorem Ipsum About Chicken Parm", cost: 21.50 },
-                { desc: "Shrimp Scampi*Lorem Ipsum About Shrimp Scampi", cost: 24.75 },
-                { desc: "Rice Balls*Lorem Ipsum About Rice Balls", cost: 14 },
-                { desc: "Chicken Parm*Lorem Ipsum About Chicken Parm", cost: 21.50 },
-                { desc: "Shrimp Scampi*Lorem Ipsum About Shrimp Scampi", cost: 24.75 },
-
-            ]
-        },
-        {
-            id: "fro", room: "300", created: 1000, status: "Processing", requestedOffering: [
-                { desc: "Chicken Parm*Lorem Ipsum About Chicken Parm", cost: 21.50 }
-            ]
-        },
-        {
-            id: "fru", room: "300", created: 1000, status: "Completed", requestedOffering: [
-                { desc: "Shrimp Scampi*Lorem Ipsum About Shrimp Scampi", cost: 24.75 }
-            ]
-        }, {
-            id: "fra", room: "300", created: 1000, status: "Completed", requestedOffering: [
-                { desc: "Chicken Parm*Lorem Ipsum About Chicken Parm", cost: 21.50 },
-                { desc: "Shrimp Scampi*Lorem Ipsum About Shrimp Scampi", cost: 24.75 },
-                { desc: "Rice Balls*Lorem Ipsum About Rice Balls Lorem Ipsum About Rice Balls Lorem Ipsum About Rice Balls Lorem Ipsum About Rice Balls Lorem Ipsum About Rice Balls Lorem Ipsum About Rice Balls Lorem Ipsum About Rice Balls Lorem Ipsum About Rice Balls Lorem Ipsum About Rice Balls Lorem Ipsum About Rice Balls Lorem Ipsum About Rice Balls Lorem Ipsum About Rice Balls", cost: 14 },
-            ]
-        }, {
-            id: "fre", room: "300", created: 1000, status: "Cancelled", requestedOffering: [
-                { desc: "Shrimp Scampi*Lorem Ipsum About Shrismp Scampi", cost: 24.75 },
-                { desc: "Shrimp Scampi*Lorem Ipsum About Shrismp Scampi", cost: 24.75 },
-                { desc: "Shrimp Scampi*Lorem Ipsum About Shrismp Scampi", cost: 24.75 }
-            ]
-        },
-    ]
-
-
-
     return (
-        <View style={{ maxHeight: "98%", width: scrWidth, alignItems: "center", paddingTop: 30 }}>
-            <Text style={{ paddingBottom: 15 }}>Completed orders component</Text>
-            <View style={{ alignItems: "center", width: scrWidth, maxHeight: scrHeight, height: "100%" }}>
-                <Accordion containerStyle={{}} sectionContainerStyle={styles.accordItem} activeSections={activeSections} sections={dummy} renderSectionTitle={renderTitle} renderHeader={renderHeader} renderContent={renderContent} onChange={(section: any) => { updateSections(section) }} expandMultiple={false} renderAsFlatList={true} />
-            </View>
+    orderHistory.length ===0 ?<></>:<View style={{ maxHeight: "98%", width: scrWidth, alignItems: "center", paddingTop: 30 }}>
+        <Text style={{ paddingBottom: 15 }}>Completed orders component</Text>
+        <View style={{ alignItems: "center", width: scrWidth, maxHeight: scrHeight, height: "100%" }}>
+            <Accordion containerStyle={{}} sectionContainerStyle={styles.accordItem} activeSections={activeSections} sections={orderHistory} renderSectionTitle={renderTitle} renderHeader={renderHeader} renderContent={renderContent} onChange={(section: any) => { updateSections(section) }} expandMultiple={false} renderAsFlatList={true} />
         </View>
+    </View>
+        
     )
 }
 

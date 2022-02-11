@@ -10,11 +10,8 @@ export default function ComplaintView() {
 
     //complaint to be added
     const [complaint, setComplaint] = useState({
-        id: "",
-        submittedTime: 0,
         desc: "",
-        status: "Unreviewed",
-        photoLink: undefined
+        file: ""
     })
 
     function addComplaint() {
@@ -26,22 +23,22 @@ export default function ComplaintView() {
         }
     }
 
-    function addPhoto() {
+    async function addPhoto() {
+
         console.log("wow nice photo")
+
+        const response = await fetch("https://project1-backend-final.azurewebsites.net/stats", {
+            method: "POST",
+            headers:  {'Content-Type': 'application/json'},
+            body: JSON.stringify(complaint)
+        })
     }
 
     return (<View style={styles.container}>
             <View style={styles.form}>
                 <Text style={{ fontSize: 24, marginHorizontal: 16 }}>Create A New Complaint: </Text>
                 <Text style={{ marginHorizontal: 16 }}>Description:</Text>
-                <TextInput style={styles.input} multiline={true} onChangeText={t => setComplaint({
-                    //random number for ID, not necessary
-                    id: String(Math.random() * 999),
-                    submittedTime: new Date().getTime(),
-                    desc: t,
-                    status: "Unreviewed",
-                    photoLink: undefined
-                })} />
+                <TextInput style={styles.input} multiline={true} onChangeText={t => setComplaint({...complaint, desc: t})} />
                 {/* put more space here */}
                 <View style={styles.buttonView}>
                     {/* form buttons */}

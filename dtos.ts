@@ -49,11 +49,12 @@ export interface Problem {
 }
 
 interface LocationImage {
-    location: "Nightclub" | "Contract Bar" | "Terrace" | "Gymnasium" | "Tools Vault" | "Grand Lobby" | "Balcony";
+    location: "Nightclub" | "Contract Bar" | "Terrace" | "Gymnasium" | "Tools Vault" | "Grand Lobby" | "Balcony" | "Pool";
     photoLink: string
 }
 
 export const activityLocationBasedImages: LocationImage[] = [
+    { location: "Pool", photoLink: 'https://specialspectacleimg.blob.core.windows.net/continentalimgs/pool.jpg'},
     { location: "Balcony", photoLink: 'https://media-cdn.tripadvisor.com/media/photo-s/03/78/af/61/armani-hotel-dubai.jpg' },
     { location: "Contract Bar", photoLink: 'https://img2.10bestmedia.com/Images/Photos/369088/Sazerac-Bar_54_990x660.jpg' },
     { location: "Grand Lobby", photoLink: 'https://upload.wikimedia.org/wikipedia/commons/e/e3/Shanghai_Disneyland_Hotel_Grand_Lobby.jpg' },

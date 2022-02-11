@@ -3,7 +3,6 @@ import { ServiceRequest, Offering, Offerings, Reservation } from "../../dtos";
 import Accordion from 'react-native-collapsible/Accordion';
 import { scrHeight, scrWidth } from "./dimenstions";
 import { useEffect, useState } from "react";
-import { convertCompilerOptionsFromJson } from "typescript";
 
 export default function CompletedOrders(props:{reservation:Reservation}) {
 

@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
-import { FlatList, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { FlatList, ImageBackground, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { activityLocationBasedImages } from "../dtos";
 
 
 export default function ActivityView() {
     const [activities, setActivities] = useState([
-        { id: "1", title: "NAME", desc: "DESCRIPTION", startTime: 0, endTime: 1, location: "HERE", status: "On Schedule" }
+        { id: "1", title: "NAME", desc: "DESCRIPTION", startTime: 0, endTime: 1, location: "Balcony", status: "On Schedule" }
     ])
 
     async function getActivites() {
@@ -30,9 +31,13 @@ export default function ActivityView() {
 
                         <View style={{ flexDirection: 'row' }}>
                             {/* Image View */}
-                            <View style={{ backgroundColor: '#ffcab1', height:120}}>
-                                <View style={{ height: 100, width: 100, backgroundColor: 'red' }}></View>
+                            <View style={{ backgroundColor: 'rgba(206, 176, 7, .7)', height:120}}>
+
+                                <ImageBackground source={{ uri: activityLocationBasedImages[activityLocationBasedImages.findIndex(c => c.location === item.location)]?.photoLink }} style={styles.activityPhoto}>
+                                    
+                                </ImageBackground>
                                 <Text style={styles.location}>{item.location}</Text>
+                                
                             </View>
                             {/* Description View */}
                             <View>
@@ -90,11 +95,16 @@ const styles = StyleSheet.create({
     location: {
         fontSize: 12,
         textAlign: 'center',
+        
     },
     times: {
         fontSize: 12,
         color: 'grey',
         paddingLeft: 20,
         paddingRight: 20
-    }
+    },
+    activityPhoto: { 
+        height: 100, 
+        width: 100, 
+        backgroundColor: 'red' }
 });

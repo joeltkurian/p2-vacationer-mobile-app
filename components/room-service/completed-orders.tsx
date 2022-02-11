@@ -17,7 +17,6 @@ export default function CompletedOrders(props:{reservation:Reservation}) {
             const fullList:ServiceRequest[] = await response.json();
             const filtered:ServiceRequest[] = fullList.filter(item=>item.room === props.reservation.room);
             setOrderHistory(filtered);
-            alert("orders fetched successfully");
         })();
     },[update])
 

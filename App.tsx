@@ -1,24 +1,32 @@
-import { StatusBar } from 'expo-status-bar';
-import { useState } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useEffect, useState } from 'react';
 import { View, StyleSheet, ImageBackground } from 'react-native';
-import ActivityView from './components/activity-view';
-import ComplaintView from './components/complaint-view';
-import RoomServiceComponent from './components/room-service/room-service-container';
+import HomePage from './components/homepage';
 import SignInView from './components/sign-in-view';
+import { Reservation } from './dtos';
+import { initialReservation, userContext } from './userContext';
 
 export default function App() {
-  const [user, setUser] = useState({ id: "69420", isAuthenticated: false })
+  const [user, setUser] = useState<Reservation>(initialReservation);
+
+  useEffect(() => {
+    AsyncStorage.getItem('user').then(json => {
+      if (json) {
+        setUser(JSON.parse(json));
+      }
+    });
+  }, []);
 
   return (
-    <ImageBackground resizeMode='cover' style={styles.backgroundImage} source={{uri:"https://specialspectacleimg.blob.core.windows.net/continentalimgs/backgroundContinental.jpg"}}>
+    <ImageBackground resizeMode='cover' style={styles.backgroundImage} source={{ uri: "https://specialspectacleimg.blob.core.windows.net/continentalimgs/backgroundContinental.jpg" }}>
       <View style={styles.container}>
-    
-        {!user.isAuthenticated ? <SignInView user={user} updateUser={setUser} /> :
-          // In-app navigation goes here
-          //<ActivityView/>
-          <RoomServiceComponent userId={user.id}/>
+        {user && user.id === '' ?
+          <SignInView updateUser={setUser} />
+          :
+          <userContext.Provider value={{ user, setUser }}>
+            <HomePage />
+          </userContext.Provider>
         }
-        <StatusBar style="auto" />
       </View>
     </ImageBackground>
   );
@@ -30,8 +38,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   backgroundImage: {
-    flex:1, 
-    backgroundColor:'red',
-    justifyContent:'center'
+    flex: 1,
+    backgroundColor: 'red',
+    justifyContent: 'center'
   }
 });

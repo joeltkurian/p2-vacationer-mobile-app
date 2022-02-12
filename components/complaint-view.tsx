@@ -1,88 +1,93 @@
 import { useEffect, useState } from "react";
-import { Alert, FlatList, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Alert, FlatList, StyleSheet, Text, TextInput, Pressable, View } from "react-native";
+import { borderColor, loginBtn, loginBtnActive, mainBackgroundColor, textColor } from "../styling";
+import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 
 export default function ComplaintView() {
 
-    // swaps between complaints view vs create complaint form
-    // true = view | false = form
-
-    const [focus, setFocus] = useState(true)
-
     //complaint to be added
-    const [complaint, setComplaint] = useState({
-        desc: "",
-        file: ""
-    })
-
-    function addComplaint() {
-        if (complaint.desc != "") {
-            //look up how to set this up vvv
-            //Platform.OS === 'android'? ToastAndroid.show("Item Added to Cart", ToastAndroid.SHORT) :alert("Item Added to Cart")
-
-            Alert.alert("Complaint " + complaint.desc + " added!")
+    const [desc, setDesc] = useState('');
+    const [photoUri, setPhotoUri] = useState('');
+    function submit() {
+        if (desc != "") {
+            alert(desc);
+        } else {
+            alert('please add a description');
         }
     }
 
     async function addPhoto() {
-
-        console.log("wow nice photo")
-
-        const response = await fetch("https://project1-backend-final.azurewebsites.net/stats", {
-            method: "POST",
-            headers:  {'Content-Type': 'application/json'},
-            body: JSON.stringify(complaint)
-        })
+        const result = await launchCamera({ mediaType: 'photo', includeBase64: true });
+        //console.log(result);
     }
 
-    return (<View style={styles.container}>
-            <View style={styles.form}>
-                <Text style={{ fontSize: 24, marginHorizontal: 16 }}>Create A New Complaint: </Text>
-                <Text style={{ marginHorizontal: 16 }}>Description:</Text>
-                <TextInput style={styles.input} multiline={true} onChangeText={t => setComplaint({...complaint, desc: t})} />
-                {/* put more space here */}
-                <View style={styles.buttonView}>
-                    {/* form buttons */}
-                    <TouchableOpacity style={styles.button} onPress={addPhoto}>
-                        <Text>Add Photo</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.button} onPress={addComplaint}>
-                        <Text>Submit</Text>
-                    </TouchableOpacity>
-                </View>
+    return (<View style={styles.total}>
+        <View style={styles.container}>
+            <Text style={styles.title}>Create A New Complaint</Text>
+            <View style={styles.border} />
+            <View >
+                <Text style={styles.desc}>Description</Text>
+                <TextInput style={styles.input} multiline={true} onChangeText={t => setDesc(t)} />
             </View>
+            {/* put more space here */}
+            <View style={styles.buttonView}>
+                {/* form buttons */}
+                <Pressable onPress={addPhoto}
+                    style={({ pressed }) => [
+                        {
+                            backgroundColor: pressed
+                                ? loginBtnActive
+                                : loginBtn
+                        },
+                        [styles.Btn, { marginRight: 50 }]
+                    ]}><Text style={styles.BtnTxt}>Add Photo</Text>
+                </Pressable>
+                <Pressable onPress={submit}
+                    style={({ pressed }) => [
+                        {
+                            backgroundColor: pressed
+                                ? loginBtnActive
+                                : loginBtn
+                        },
+                        [styles.Btn, { marginRight: 50 }]
+                    ]}><Text style={styles.BtnTxt}>  Submit </Text>
+                </Pressable>
+            </View>
+        </View>
     </View>);
 
 }
 
 const styles = StyleSheet.create({
+    total: {
+        width: '90%',
+        height: '90%',
+        marginTop: '20%',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    border: {
+        borderWidth: 1,
+        width: '100%',
+        borderColor: '#000',
+        marginBottom: 2,
+    },
     container: {
         width: '100%',
-        height: '100%',
-        alignItems: 'center',
-        backgroundColor: 'rgba(206, 176, 7, .7)',
-        justifyContent: 'center',
-    },
-    containerFlatList: {
-        width: '95%',
-        height: '80%',
-        justifyContent: 'center',
-    },
-    item: {
-        flex: 1,
-        backgroundColor: 'rgba(247, 238, 123, .8)',
-        padding: 20,
-        marginVertical: 8,
-        marginHorizontal: 16,
-        height: 250
+        padding: 10,
+        backgroundColor: mainBackgroundColor,
+        borderColor: borderColor,
+        borderWidth: 2,
+        borderRadius: 10,
     },
     title: {
         fontSize: 28,
-        textAlign: 'center'
+        textAlign: 'center',
+        fontWeight: 'bold',
     },
     desc: {
-        fontSize: 12,
+        fontSize: 20,
         paddingLeft: 20,
-        paddingRight: 100
     },
     timeText: {
         fontSize: 12,
@@ -91,28 +96,29 @@ const styles = StyleSheet.create({
         color: 'grey',
     },
     buttonView: {
+        paddingLeft: 20,
         flexDirection: 'row',
+        alignItems: 'center',
         justifyContent: 'space-evenly',
-        alignItems: 'center',
-        position: 'absolute',
-        height: 50,
-        bottom: 0,
-        width: '100%',
-        marginTop: 5,
-        backgroundColor: 'rgba(247, 238, 123, .5)'
     },
-    button: {
-        alignItems: 'center',
-        width: 150,
-        backgroundColor: 'rgba(182, 134, 2, 1)'
+    Btn: {
+        margin: 5,
+        borderRadius: 8,
+        padding: 6,
     },
-    form: {
-        flex: .3,
-        backgroundColor: 'rgba(247, 238, 123, 1)'
+    BtnTxt: {
+        textAlign: 'center',
+        color: textColor,
+        fontWeight: 'bold',
+        fontSize: 20,
     },
     input: {
-        width: 400,
-        height: 80,
-        backgroundColor: 'rgba(252, 255, 233, 1)',
+        backgroundColor: 'rgba(252, 255, 255, 0.5)',
+        minHeight: '15%',
+        textAlign: 'center',
+        fontSize: 20,
+        borderWidth: 2,
+        borderColor: "rgba(0,0,0,0.4)",
+        borderRadius: 8,
     }
 });

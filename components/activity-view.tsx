@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { FlatList, ImageBackground, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { activityLocationBasedImages } from "../dtos";
+import { borderColor, mainBackgroundColor } from "../styling";
 
 
 export default function ActivityView() {
@@ -16,7 +17,7 @@ export default function ActivityView() {
 
     }
 
-    useEffect(()=>{
+    useEffect(() => {
         getActivites();
     }, [])
 
@@ -25,28 +26,26 @@ export default function ActivityView() {
             <FlatList
                 data={activities}
                 renderItem={({ item }) => (
-                    <TouchableOpacity style={styles.item}>
+                    <View style={item.status === "On Schedule" ? styles.item : styles.itemCancelled}>
 
                         <Text style={styles.title}>{item.title}</Text>
-
+                        <View style={styles.border} />
                         <View style={{ flexDirection: 'row' }}>
                             {/* Image View */}
-                            <View style={{ backgroundColor: 'rgba(206, 176, 7, .7)', height:120}}>
-
-                                <ImageBackground source={{ uri: activityLocationBasedImages[activityLocationBasedImages.findIndex(c => c.location === item.location)]?.photoLink }} style={styles.activityPhoto}>
-                                    
-                                </ImageBackground>
+                            <View >
+                                <ImageBackground source={{ uri: activityLocationBasedImages[activityLocationBasedImages.findIndex(c => c.location === item.location)]?.photoLink }} style={styles.activityPhoto} />
                                 <Text style={styles.location}>{item.location}</Text>
-                                
                             </View>
                             {/* Description View */}
-                            <View>
-                                <Text style={styles.desc}>DESCRIPTION: {item.desc} STATUS: {item.status}</Text>
+                            <View style={styles.textStuff}>
+                                <Text style={styles.desc}>{item.desc}</Text>
+                                <View style={styles.border} />
+                                <Text style={[styles.desc, { marginLeft: 10, fontWeight: 'bold', fontSize: 14, color: "#000" }]}>STATUS: {item.status}</Text>
                                 <Text>{"\n"}</Text>
-                                <Text style={styles.times}>Starts: {item.startTime} Ends: {item.endTime}</Text>
+                                <Text style={styles.times}>Starts: {item.startTime} - Ends: {item.endTime}</Text>
                             </View>
                         </View>
-                    </TouchableOpacity>
+                    </View>
                 )}
             />
         </View>
@@ -59,10 +58,10 @@ export default function ActivityView() {
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: 'rgba(206, 176, 7, .7)',
+        marginTop: '18%',
         justifyContent: 'center',
         alignItems: 'center',
-        height: '100%',
+        height: '98%',
         width: '100%'
     },
     flatlist: {
@@ -71,40 +70,58 @@ const styles = StyleSheet.create({
         height: '85%',
         width: '95%'
     },
-    text: {
-        color: 'rgba(100,0,40,1)'
+    border: {
+        borderWidth: 1,
+        width: '100%',
+        borderColor: '#000',
+        marginBottom: 2,
     },
     item: {
-        flex: 1,
-        backgroundColor: 'rgba(247, 238, 123, .8)',
-        padding: 20,
+        backgroundColor: mainBackgroundColor,
+        borderWidth: 2,
+        borderColor: borderColor,
+        padding: 8,
         marginVertical: 8,
+        borderRadius: 10,
         marginHorizontal: 16,
-        height: 220
-
+    },
+    itemCancelled: {
+        backgroundColor: 'rgba(150, 150, 150, 0.6)',
+        opacity: 0.6,
+        borderWidth: 2,
+        borderColor: 'rgba(150, 150, 150, 0.8)',
+        padding: 8,
+        marginVertical: 8,
+        borderRadius: 10,
+        marginHorizontal: 16,
+    },
+    textStuff: {
+        width: '60%',
+        flexDirection: 'column',
     },
     title: {
         fontSize: 28,
         textAlign: 'center'
     },
     desc: {
-        fontSize: 12,
-        paddingLeft: 20,
-        paddingRight: 85
+        fontSize: 14,
+        textAlign: 'center'
     },
     location: {
-        fontSize: 12,
+        fontSize: 14,
         textAlign: 'center',
-        
+        position: 'absolute',
+        margin: 2,
+        backgroundColor: mainBackgroundColor,
     },
     times: {
-        fontSize: 12,
-        color: 'grey',
+        fontSize: 13,
+        color: 'black',
         paddingLeft: 20,
         paddingRight: 20
     },
-    activityPhoto: { 
-        height: 100, 
-        width: 100, 
-        backgroundColor: 'red' }
+    activityPhoto: {
+        height: 120,
+        width: 120,
+    }
 });

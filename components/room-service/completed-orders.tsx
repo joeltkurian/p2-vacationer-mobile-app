@@ -1,61 +1,69 @@
 import { FlatList, Pressable, StyleSheet, Text, View } from "react-native";
-import { ServiceRequest, Offering, Offerings, Reservation } from "../../dtos";
+import { ServiceRequest, Offering, Offerings, Reservation, returnNewService } from "../../dtos";
 import Accordion from 'react-native-collapsible/Accordion';
 import { scrHeight, scrWidth } from "./dimenstions";
 import { useEffect, useState } from "react";
+import { borderColor, loginBtn, loginBtnActive, mainBackgroundColor } from "../../styling";
+import { formatted_date } from "../../userContext";
 
-export default function CompletedOrders(props:{reservation:Reservation}) {
+export default function CompletedOrders(props: { reservation: Reservation }) {
 
     const [activeSections, updateSections] = useState([]);
 
     const [orderHistory, setOrderHistory] = useState<ServiceRequest[]>([]);
-    const [update,setUpdate] = useState<boolean>(false);
+    const [update, setUpdate] = useState<boolean>(false);
 
-    useEffect(()=>{
-        (async()=>{
+    useEffect(() => {
+        (async () => {
             const response = await fetch('http://20.121.74.219:3000/servicerequests');
-            const fullList:ServiceRequest[] = await response.json();
-            const filtered:ServiceRequest[] = fullList.filter(item=>item.room === props.reservation.room);
+            const fullList: ServiceRequest[] = await response.json();
+            const filtered: ServiceRequest[] = fullList.filter(item => item.room === props.reservation.room);
             setOrderHistory(filtered);
         })();
-    },[update])
+    }, [update])
 
-    async function cancelRequest(section:ServiceRequest){
-        const action = {status:"Cancel"};
-        const response = await fetch('http://20.121.74.219:3000/servicerequests/'+section.id,{
-            method:"PATCH",
-            body:JSON.stringify(action),
-            headers:{ 'content-type': 'application/json',
-                        'Accept': 'application/json' }
+    async function cancelRequest(section: ServiceRequest) {
+        const action = { status: "Cancel" };
+        const response = await fetch('http://20.121.74.219:3000/servicerequests/' + section.id, {
+            method: "PATCH",
+            body: JSON.stringify(action),
+            headers: {
+                'content-type': 'application/json',
+                'Accept': 'application/json'
+            }
         });
         const data = await response.json()
-        if(response.status === 200){
+        if (response.status === 200) {
             setUpdate(!update);
         }
-        else{
+        else {
             console.log(response);
             alert("Request could not be updated.");
         }
     }
 
-    function renderTitle(section: ServiceRequest) {
-        return (
-            <View style={{ height: 0 }}>
-                <Text style={{ fontSize: 10 }}>ID: {section.id}</Text>
-            </View>
-        )
-    }
-
     function renderHeader(section: ServiceRequest) {
+        let total = 0;
+        for (const c of section.requestedOfferings) {
+            total += c.cost;
+        }
+
         return (
-            <View style={{ flexDirection: "row", padding: 5, backgroundColor: section.status === 'Ordered' ? "#0ff9" : section.status === 'Processing' ? "#00f9" : section.status === 'Cancel' ? "#f009" : "#0f09", height: 30, justifyContent: "space-between" }}>
-                <Text style={{ alignSelf: "flex-start" }}>Room #: {section.room}</Text>
-                <Text style={{ alignSelf: "flex-end" }}>Status: {section.status}</Text>
-                {section.status === "Ordered" || section.status === "Processing" ? 
-                    <Pressable style={{height:"100%", backgroundColor:"#f009"}} onPress={()=>cancelRequest(section)}>
-                        <Text>Cancel Order</Text>
+            <View style={[styles.amountStatContainer, { opacity: section.status === 'Cancel' ? 0.5 : 1, backgroundColor: section.status === 'Ordered' ? "rgba(0,0,0,0.4)" : section.status === 'Processing' ? "rgba(255,255,0,0.5)" : section.status === 'Cancel' ? "rgba(255,0,0,0.5)" : "rgba(0,255,0,0.5)" }]}>
+                <Text style={styles.headerTxt}>Amount: ${(Math.round(total * 100) / 100).toFixed(2)}</Text>
+                <Text style={[styles.headerTxt, { alignSelf: "flex-end" }]}>Status: {section.status}</Text>
+                {section.status === "Ordered" || section.status === "Processing" ?
+                    <Pressable onPress={() => cancelRequest(section)} style={({ pressed }) => [
+                        {
+                            backgroundColor: pressed
+                                ? 'rgba(100,0,0,0.7)'
+                                : 'rgba(255,0,0,0.7)'
+                        },
+                        styles.cancelBtn
+                    ]}>
+                        <Text style={styles.cancelBtnTxt}>Cancel Order</Text>
                     </Pressable>
-                :<></>}
+                    : <></>}
             </View>
         )
     }
@@ -90,42 +98,95 @@ export default function CompletedOrders(props:{reservation:Reservation}) {
 
         function renderItem(props: { offering: Offering, quantity: number }) {
             const { desc, cost } = props.offering;
-            const [title, rest] = desc.split('*');
+            const service = returnNewService(desc);
             return (
-                <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-                    <Text>{title}:</Text>
-                    <Text>x{props.quantity}     ${(cost * props.quantity).toFixed(2)}</Text>
+                <View style={{ flexDirection: "column", padding: 5 }}>
+                    <Text style={{ fontWeight: 'bold', }}>{service.desc}:</Text>
+                    <View style={styles.border} />
+                    <View style={{ paddingTop: 5, paddingLeft: "35%", }}>
+                        <Text> Quantity: {props.quantity}</Text><Text>Amount:  ${(cost * props.quantity).toFixed(2)}</Text>
+                    </View>
                 </View>
             )
         }
 
-        return (
-            <View style={{ alignItems: "center", backgroundColor: "#fff3" }}>
-                <Text>Order ID: {section.id}</Text>
-                <Text>Room #: {section.room}</Text>
-                <Text>Ordered: {section.created}</Text>
-                <Text>Status: {section.status}</Text>
-                <Text>Order Total: ${bill.toFixed(2)}</Text>
-                <Text>Order Contents:</Text>
-                <FlatList style={{ width: scrWidth - 100, backgroundColor: "#fff5" }} data={condensed.items} renderItem={({ item, index }) => renderItem({ offering: item, quantity: condensed.quantities[index] })} keyExtractor={(item) => item.desc} />
+        return (<View style={{ opacity: section.status === 'Cancel' ? 0.5 : 1 }}>
+            <View style={styles.insideContent}>
+                <Text style={styles.text}>{formatted_date(section.created)}</Text>
+                <Text style={styles.text}>Status: {section.status}</Text>
+                <Text style={styles.text}>Order Total: ${bill.toFixed(2)}</Text>
             </View>
-        )
+            <Text style={[styles.text, { fontWeight: 'bold' }]}>Order Contents:</Text>
+            <FlatList style={styles.itemContent} data={condensed.items} renderItem={({ item, index }) => renderItem({ offering: item, quantity: condensed.quantities[index] })} keyExtractor={(item) => item.desc} />
+        </View>)
     }
 
     return (
-    orderHistory.length ===0 ?<></>:<View style={{ maxHeight: "98%", width: scrWidth, alignItems: "center", paddingTop: 30 }}>
-        <Text style={{ paddingBottom: 15 }}>Completed orders component</Text>
-        <View style={{ alignItems: "center", width: scrWidth, maxHeight: scrHeight, height: "100%" }}>
-            <Accordion containerStyle={{}} sectionContainerStyle={styles.accordItem} activeSections={activeSections} sections={orderHistory} renderSectionTitle={renderTitle} renderHeader={renderHeader} renderContent={renderContent} onChange={(section: any) => { updateSections(section) }} expandMultiple={false} renderAsFlatList={true} />
-        </View>
-    </View>
-        
+        orderHistory.length === 0 ? <Text>No Orders Present for this Room</Text> :
+            <View style={{ maxHeight: "98%", width: '100%', alignItems: "center", paddingTop: 20 }}>
+                <View style={{ width: '100%', height: '100%' }}>
+                    <Accordion sectionContainerStyle={styles.accordItem} activeSections={activeSections} sections={orderHistory} renderHeader={renderHeader} renderContent={renderContent} onChange={(section: any) => { updateSections(section) }} expandMultiple={false} renderAsFlatList={true} />
+                </View>
+            </View >
+
     )
 }
 
 const styles = StyleSheet.create({
     accordItem: {
-        overflow: "visible",
-        paddingVertical: 3,
+        paddingVertical: 10,
+        borderRadius: 10,
+        padding: 5,
+        marginVertical: 5,
+        backgroundColor: mainBackgroundColor,
+        borderWidth: 2,
+        borderColor: borderColor,
+    },
+    cancelBtn: {
+        borderRadius: 8,
+        margin: 5,
+        padding: 3,
+        borderWidth: 1,
+        borderColor: "rgba(255,0,0,1)",
+    },
+    cancelBtnTxt: {
+        textAlign: 'center',
+        fontSize: 15,
+        fontWeight: 'bold',
+    },
+    amountStatContainer: {
+        flexDirection: "row",
+        borderWidth: 2,
+        borderColor: borderColor,
+        borderRadius: 10,
+        padding: 5,
+        justifyContent: "space-between",
+    },
+    headerTxt: {
+        fontSize: 15,
+        fontWeight: 'bold',
+        fontStyle: 'italic',
+    },
+    insideContent: {
+        alignItems: "center",
+        borderWidth: 2,
+        borderRadius: 10,
+    },
+    border: {
+        borderWidth: 2,
+        width: '100%',
+        borderColor: '#000',
+    },
+    itemContent:
+    {
+        width: "100%",
+        borderRadius: 10,
+        backgroundColor: mainBackgroundColor,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    text: {
+        fontSize: 15,
+        fontStyle: 'italic',
     }
 })

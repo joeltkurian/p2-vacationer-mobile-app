@@ -1,47 +1,57 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useState } from "react";
-import { StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { StyleSheet, Text, TextInput, Pressable, View } from "react-native";
+import { Reservation } from "../dtos";
+import { borderColor, loginBtn, loginBtnActive, mainBackgroundColor, textColor } from "../styling";
 
-export default function SignInView(props: { user: { id: String, isAuthenticated: Boolean }, updateUser: Function }) {
-    
+export default function SignInView(props: { updateUser: Function }) {
+
     const [id, setID] = useState("")
 
     async function signin() {
         //make an actual login request
-
-        const response = await fetch("https://a130d8c2-b00f-4b4d-9a87-8d1d9f9ba331.mock.pstmn.io/reservations/"+id)
-        const user = await response.json();
-
-        //setUser instead of setID
-        let isAuth = false;
-
-        try{
-        if (id === user.id)
-             isAuth = true 
-        } catch(error) {
-            alert(`User ${id} does not exist.`)
+        if (id != '') {
+            const response = await fetch("https://a130d8c2-b00f-4b4d-9a87-8d1d9f9ba331.mock.pstmn.io/reservations/" + id);
+            const user: Reservation = await response.json();
+            if (user) {
+                console.log(user);
+                await AsyncStorage.setItem("user", JSON.stringify(user));
+                props.updateUser(user);
+            } else {
+                alert(`Reservation id:${id} does not exist, please try again!`);
+            }
         }
-
-        props.updateUser({ id: id, isAuthenticated: isAuth })
+        else { alert('Please enter a valid reservation ID'); }
     }
 
     return (<View style={styles.container}>
-        <Text style={styles.header}>Sign in with your ID:{"\n\n"}</Text>
-        <TextInput style={{ backgroundColor: '#eeffee' }} onChangeText={t => setID(t)}></TextInput>
+        <Text style={styles.header}>Sign in with your ID</Text>
+        <TextInput style={{ backgroundColor: '#eeffee', textAlign: 'center', borderWidth: 1, borderRadius: 10, marginBottom: 5 }} onChangeText={t => setID(t)}></TextInput>
 
-        <TouchableOpacity onPress={signin}>
-            <Text style={styles.viewbutton}>Sign In</Text>
-        </TouchableOpacity>
-        
+        <Pressable onPress={signin}
+            style={({ pressed }) => [
+                {
+                    backgroundColor: pressed
+                        ? loginBtnActive
+                        : loginBtn
+                },
+                styles.Btn
+            ]}><Text style={styles.BtnTxt}>Sign In</Text>
+        </Pressable>
+
     </View>);
 
 }
 
 const styles = StyleSheet.create({
     container: {
-        flex: .3,
-        backgroundColor: 'rgba(206, 176, 7, .7)',
+        padding: 30,
+        backgroundColor: mainBackgroundColor,
+        borderColor: borderColor,
         justifyContent: 'center',
         paddingRight: 20,
+        borderWidth: 2,
+        borderRadius: 10,
         paddingLeft: 20,
     },
     viewbutton: {
@@ -49,11 +59,23 @@ const styles = StyleSheet.create({
         textAlign: 'center',
     },
     header: {
-        fontSize: 20,
-        textAlign: 'center'
-
+        fontSize: 30,
+        textAlign: 'center',
+        paddingBottom: 15,
     },
     textbox: {
+        textAlign: 'center',
         backgroundColor: 'white'
-    }
+    },
+    Btn: {
+        margin: 5,
+        borderRadius: 8,
+        padding: 6,
+    },
+    BtnTxt: {
+        textAlign: 'center',
+        color: textColor,
+        fontWeight: 'bold',
+        fontSize: 20,
+    },
 });

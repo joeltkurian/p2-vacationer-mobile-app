@@ -86,4 +86,4 @@ export const activityLocationBasedImages: LocationImage[] = [
     { location: "Tools Vault", photoLink: 'https://specialspectacleimg.blob.core.windows.net/continentalimgs/vault.jpg' },
 ]
 
-export const pages = { Reservation: "Reservation Details", Activities: "Activities", Service: "Room Service", Complaints: "Report A Problem" };
+export const pages = { Reservation: "Reservation Details", Activities: "Activities", Service: "Room Service", Complaints: "Report A Problem", Kirbo: "Kirbo"};

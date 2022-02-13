@@ -1,6 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useContext, useEffect, useRef } from "react";
-import { Animated, View, StyleSheet, Text, Pressable } from "react-native";
+import { Animated, View, StyleSheet, Text, Pressable, TouchableOpacity, ImageBackground } from "react-native";
 import { pages, Reservation } from "../dtos";
 import { borderColor, loginBtn, loginBtnActive, textColor } from "../styling";
 import { initialReservation, userContext } from "../userContext";
@@ -47,6 +47,13 @@ export default function NavigationPanel(props: { setNav: Function, Nav: boolean,
             <ChoosePage name={pages.Activities} setPage={props.setPage} setNav={props.setNav} />
             <ChoosePage name={pages.Service} setPage={props.setPage} setNav={props.setNav} />
             <ChoosePage name={pages.Complaints} setPage={props.setPage} setNav={props.setNav} />
+            
+            {/* ---------------------------------------------HMMMMM I WONDER WHAT THIS IS --------------------------------------------------------------- */}
+            <TouchableOpacity style={{position: 'absolute', top:'90%', left:'90%'}}>
+                <ImageBackground style={{width:15, height:15}} source={{ uri: 'https://project1storagebrooks.blob.core.windows.net/brooks-project2/icon.gif'}} >
+                    <ChoosePage name={pages.Kirbo} setPage={props.setPage} setNav={props.setNav} />
+                </ImageBackground>
+            </TouchableOpacity>
 
 
             {/* -------------------------------------------------------------------------------------------------------------------------- */}

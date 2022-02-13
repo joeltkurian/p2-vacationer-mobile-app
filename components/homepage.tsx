@@ -41,7 +41,13 @@ export default function HomePage() {
                             <RoomServiceComponent /> :
                             currentPage === pages.Complaints ?
                                 <ComplaintView /> :
-                                <Text>Something Went Wrong</Text>
+                                currentPage === pages.Kirbo ?
+                                <View style={{height: 200, width: 240, backgroundColor: 'rgba(255, 240, 200, 0.35)', borderRadius: 20}}>
+                                    <Text style={styles.error}>Everything is fine, nothing is ruined</Text>
+                                    <ImageBackground style={{marginLeft: 37, width:150, height:150}} source={{ uri: 'https://project1storagebrooks.blob.core.windows.net/brooks-project2/icon.gif'}} /> 
+                                </View> :
+
+                                    <Text>Something Went Wrong</Text>
                 }
             </View>
             {Nav ?
@@ -137,5 +143,10 @@ const styles = StyleSheet.create({
     welcomeText: {
         fontSize: 25,
         padding: 5,
+    },
+    error: {
+        color: 'white',
+        textAlign: 'center',
+        alignContent: 'center'
     }
 });

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { Text, View, Image, Button, FlatList, Dimensions, Platform, ToastAndroid, StyleSheet, Pressable } from "react-native";
-import { ContinentalOffering, Offering, returnNewService } from '../../dtos';
+import { Text, View, Image, FlatList, Dimensions, Platform, ToastAndroid, StyleSheet, Pressable } from "react-native";
+import { Offering, returnNewService } from '../../dtos';
 import { borderColor, loginBtn, loginBtnActive, mainBackgroundColor, textColor } from "../../styling";
 
 export default function CreateOrderComponent(props: { off: Offering[], setOff: Function }) {

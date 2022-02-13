@@ -1,8 +1,8 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useState } from "react";
-import { StyleSheet, Text, TextInput, Pressable, View } from "react-native";
+import { StyleSheet, Text, TextInput, Pressable, View, ImageBackground } from "react-native";
 import { Reservation } from "../dtos";
-import { borderColor, loginBtn, loginBtnActive, mainBackgroundColor, textColor } from "../styling";
+import { backgroundContinental, borderColor, loginBtn, loginBtnActive, mainBackgroundColor, textColor } from "../styling";
 
 export default function SignInView(props: { updateUser: Function }) {
 
@@ -24,26 +24,31 @@ export default function SignInView(props: { updateUser: Function }) {
         else { alert('Please enter a valid reservation ID'); }
     }
 
-    return (<View style={styles.container}>
-        <Text style={styles.header}>Sign in with your ID</Text>
-        <TextInput style={{ backgroundColor: '#eeffee', textAlign: 'center', borderWidth: 1, borderRadius: 10, marginBottom: 5 }} onChangeText={t => setID(t)}></TextInput>
+    return (<ImageBackground source={backgroundContinental} style={styles.backgroundImage}>
+        <View style={styles.container}>
+            <Text style={styles.header}>Sign in with your ID</Text>
+            <TextInput style={{ backgroundColor: '#eeffee', textAlign: 'center', borderWidth: 1, borderRadius: 10, marginBottom: 5 }} onChangeText={t => setID(t)}></TextInput>
 
-        <Pressable onPress={signin}
-            style={({ pressed }) => [
-                {
-                    backgroundColor: pressed
-                        ? loginBtnActive
-                        : loginBtn
-                },
-                styles.Btn
-            ]}><Text style={styles.BtnTxt}>Sign In</Text>
-        </Pressable>
-
-    </View>);
+            <Pressable onPress={signin}
+                style={({ pressed }) => [
+                    {
+                        backgroundColor: pressed
+                            ? loginBtnActive
+                            : loginBtn
+                    },
+                    styles.Btn
+                ]}><Text style={styles.BtnTxt}>Sign In</Text>
+            </Pressable>
+        </View>
+    </ImageBackground>);
 
 }
 
 const styles = StyleSheet.create({
+    backgroundImage: {
+        width: '100%', height: '100%',
+        justifyContent: 'center', alignItems: 'center', flex: 1,
+    },
     container: {
         padding: 30,
         backgroundColor: mainBackgroundColor,

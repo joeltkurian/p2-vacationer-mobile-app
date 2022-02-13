@@ -1,7 +1,7 @@
 import { FlatList, Pressable, StyleSheet, Text, View } from "react-native";
 import { ServiceRequest, Offering, Offerings, Reservation, returnNewService } from "../../dtos";
 import Accordion from 'react-native-collapsible/Accordion';
-import { scrHeight, scrWidth } from "./dimenstions";
+
 import { useEffect, useState } from "react";
 import { borderColor, loginBtn, loginBtnActive, mainBackgroundColor } from "../../styling";
 import { formatted_date } from "../../userContext";

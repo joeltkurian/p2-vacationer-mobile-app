@@ -18,17 +18,15 @@ export default function App() {
   }, []);
 
   return (
-    <ImageBackground resizeMode='cover' style={styles.backgroundImage} source={{ uri: "https://specialspectacleimg.blob.core.windows.net/continentalimgs/backgroundContinental.jpg" }}>
-      <View style={styles.container}>
-        {user && user.id === '' ?
-          <SignInView updateUser={setUser} />
-          :
-          <userContext.Provider value={{ user, setUser }}>
-            <HomePage />
-          </userContext.Provider>
-        }
-      </View>
-    </ImageBackground>
+    <View style={styles.container}>
+      {user && user.id === '' ?
+        <SignInView updateUser={setUser} />
+        :
+        <userContext.Provider value={{ user, setUser }}>
+          <HomePage />
+        </userContext.Provider>
+      }
+    </View>
   );
 }
 const styles = StyleSheet.create({
@@ -36,10 +34,5 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  backgroundImage: {
-    flex: 1,
-    backgroundColor: 'red',
-    justifyContent: 'center'
   }
 });

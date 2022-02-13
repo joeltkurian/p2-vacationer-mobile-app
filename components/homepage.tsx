@@ -20,7 +20,8 @@ export default function HomePage() {
     return (<ImageBackground source={gold} style={styleBackground.image}>
         <View style={styles.border}>
             {currentPage === pages.Reservation ?
-                <View style={styles.welcome}><Text style={styles.welcomeText}>Welcome {account.user.owner}</Text></View> :
+                <><View style={styles.welcome}><Text style={styles.welcomeText}>Welcome {account.user.owner}</Text></View>
+                    <View style={styles.roomNumView}><Text style={styles.roomNum}>Reservation: {account.user.id}</Text></View></> :
                 currentPage === pages.Activities ?
                     <View style={styles.welcome}><Text style={styles.welcomeText}>ACTIVITIES</Text></View> :
                     currentPage === pages.Service ?

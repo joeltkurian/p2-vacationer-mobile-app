@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { FlatList, ImageBackground, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { FlatList, ImageBackground, StyleSheet, Text, View } from "react-native";
 import { activityLocationBasedImages } from "../dtos";
 import { borderColor, mainBackgroundColor } from "../styling";
 

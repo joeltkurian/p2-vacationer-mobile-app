@@ -77,6 +77,8 @@ const styles = StyleSheet.create({
     ham: {
         height: '100%',
         width: '100%',
+        borderRadius: 10,
+        overflow: 'hidden',
         position: 'absolute',
     },
     NAV: {

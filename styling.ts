@@ -1,8 +1,8 @@
 import { StyleSheet } from "react-native";
 
-export const hamburger = { uri: 'https://specialspectacleimg.blob.core.windows.net/continentalimgs/hamburgerIcon.png' };
-export const gold = { uri: 'https://i.imgur.com/xSSnFS2.gif' };
-export const backgroundContinental = { uri: "http://iae.news/wp-content/uploads/2021/04/9a0985904bf1cca3be1a90010fa81ff1-1.gif" };
+export const hamburger = { uri: 'https://specialspectacleimg.blob.core.windows.net/continentalimgs/hamburgerNav.gif' };
+export const gold = { uri: 'https://specialspectacleimg.blob.core.windows.net/continentalimgs/vacationerBaloon.gif' };
+export const backgroundContinental = { uri: "https://specialspectacleimg.blob.core.windows.net/continentalimgs/continentalVacationer.gif" };
 export const styleBackground = StyleSheet.create({
     image: {
         flex: 1,

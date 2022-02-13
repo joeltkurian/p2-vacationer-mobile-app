@@ -23,7 +23,8 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/images.png",
         "backgroundColor": "#FF9F00"
-      }
+      },
+      "package": "com.joeltkurian.p2vacationermobileapp"
     },
     "web": {
       "favicon": "./assets/images.png"
